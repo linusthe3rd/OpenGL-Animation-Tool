@@ -9,6 +9,8 @@
 #ifndef _POINT3F_H_
 #define _POINT3F_H_
 
+#include <math.h>
+
 struct Point3f {
 	float x, y, z;
 	

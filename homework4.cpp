@@ -19,54 +19,94 @@
 #endif
 
 #include <iostream>
+#include "Camera.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 320
 
+Camera cam;
 
-
-GLfloat light_diffuse[] = {1.0, 0.0, 0.0, 1.0};  /* Red diffuse light. */
-GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
-GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
-	{-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0},
-	{0.0, -1.0, 0.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, -1.0} };
-GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
-	{0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
-	{4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
-GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
-
-
-
-void drawCube(void)
-{
-	for (int i = 0; i < 6; i++) {
-		glBegin(GL_QUADS);
-		glNormal3fv(&n[i][0]);
-			glVertex3fv(&v[faces[i][0]][0]);
-			glVertex3fv(&v[faces[i][1]][0]);
-			glVertex3fv(&v[faces[i][2]][0]);
-			glVertex3fv(&v[faces[i][3]][0]);
-		glEnd();
-	}
+// angle of rotation for the camera direction
+float angle=0.0;
+// actual vector representing the camera's direction
+float lx=0.0f,lz=-1.0f;
+// XZ position of the camera
+float x=0.0f,z=5.0f;
+void drawSnowMan() {
+	
+	glColor3f(1.0f, 1.0f, 1.0f);
+	
+	// Draw Body
+	glTranslatef(0.0f ,0.75f, 0.0f);
+	glutSolidSphere(0.75f,20,20);
+	
+	// Draw Head
+	glTranslatef(0.0f, 1.0f, 0.0f);
+	glutSolidSphere(0.25f,20,20);
+	
+	// Draw Eyes
+	glPushMatrix();
+	glColor3f(0.0f,0.0f,0.0f);
+	glTranslatef(0.05f, 0.10f, 0.18f);
+	glutSolidSphere(0.05f,10,10);
+	glTranslatef(-0.1f, 0.0f, 0.0f);
+	glutSolidSphere(0.05f,10,10);
+	glPopMatrix();
+	
+	// Draw Nose
+	glColor3f(1.0f, 0.5f , 0.5f);
+	glRotatef(0.0f,1.0f, 0.0f, 0.0f);
+	glutSolidCone(0.08f,0.5f,10,2);
 }
 
 void display(void){
-	//glMatrixMode (GL_PROJECTION);
-	//glLoadIdentity();
-	//set coordinate system to use window coordinates for points
-	//gluOrtho2D(0, 800, 0, 600);
+	// Clear Color and Depth Buffers
 	
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	//resets the color state of all the pixels in the window, use it to set the background color of the window
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); 
+	// Reset transformations
+	glLoadIdentity();
+	// Set the camera
+	gluLookAt(cam.origin.x, cam.origin.y, cam.origin.z,
+			  cam.lookAt.x + cam.panAmount.x, cam.lookAt.y,  cam.lookAt.z + cam.panAmount.z,
+			  cam.upVector.x, cam.upVector.y,  cam.upVector.z);
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	// Draw ground
+	glColor3f(0.9f, 0.9f, 0.9f);
+	glBegin(GL_QUADS);
+		glVertex3f(-100.0f, 0.0f, -100.0f);
+		glVertex3f(-100.0f, 0.0f,  100.0f);
+		glVertex3f( 100.0f, 0.0f,  100.0f);
+		glVertex3f( 100.0f, 0.0f, -100.0f);
+	glEnd();
 	
-	drawCube();
+	// Draw 36 SnowMen
+	for(int i = -3; i < 3; i++)
+		for(int j=-3; j < 3; j++) {
+			glPushMatrix();
+			glTranslatef(i*10.0,0,j * 10.0);
+			drawSnowMan();
+			glPopMatrix();
+		}
 	
 	glutSwapBuffers();
+}
+
+void changeSize(int w, int h) {
+	if (h == 0)
+		h = 1;
+	float ratio = w * 1.0 / h;
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	// Set the viewport to be the entire window
+	glViewport(0, 0, w, h);
+	
+	// Set the correct perspective.
+	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+	
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void onMouseCB(int button, int state, int x, int y) {
@@ -90,40 +130,15 @@ void init(){
 	
 	// set up the event callbacks
 	glutDisplayFunc(display); 
+	glutIdleFunc(display);
+	glutReshapeFunc(changeSize);
 	glutMouseFunc(onMouseCB); 
 	
-	
-	
-	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
-	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1;
-	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -1;
-	v[2][1] = v[3][1] = v[6][1] = v[7][1] = 1;
-	v[0][2] = v[3][2] = v[4][2] = v[7][2] = 1;
-	v[1][2] = v[2][2] = v[5][2] = v[6][2] = -1;
-	
-	/* Enable a single OpenGL light. */
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHTING);
-	
-	/* Use depth buffering for hidden surface elimination. */
 	glEnable(GL_DEPTH_TEST);
 	
-	/* Setup the view of the cube. */
-	glMatrixMode(GL_PROJECTION);
-	gluPerspective( /* field of view in degree */ 40.0,
-				   /* aspect ratio */ 1.0,
-				   /* Z near */ 1.0, /* Z far */ 10.0);
-	glMatrixMode(GL_MODELVIEW);
-	gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
-			  0.0, 0.0, 0.0,      /* center is at (0,0,0) */
-			  0.0, 1.0, 0.);      /* up is in positive Y direction */
-	
-	/* Adjust cube position to be asthetic angle. */
-	glTranslatef(0.0, 0.0, -1.0);
-	glRotatef(60, 1.0, 0.0, 0.0);
-	glRotatef(-20, 0.0, 0.0, 1.0);
+	cam.init(1.0f, 1.0f, 5.0f,  
+			 0.0f, 1.0f, 0.0f,   
+			 0, 1, 0);
 }
 
 

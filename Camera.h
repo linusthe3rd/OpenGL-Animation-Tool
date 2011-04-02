@@ -15,6 +15,7 @@ class Camera {
 public:
 	Point3f origin;
 	Point3f lookAt;
+	Point3f panAmount;
 	Point3f upVector;
 	
 	Camera();
@@ -26,6 +27,8 @@ public:
 	void setOrigin(float x, float y, float z);
 	void setLookAt(float x, float y, float z);
 	void setUpVector(float x, float y, float z);
+	void pan(float angle);
+	void zoom(float amount);
 };
 
 #endif
