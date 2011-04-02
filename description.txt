@@ -1,0 +1,34 @@
+CS 4204 - Homework 4
+
+Author: John Ryding
+Date: 4/2/11
+
+Description
+===========
+
+
+Instructions
+============
+
+	
+		
+Program Execution Instructions
+==============================
+
+	Mac:
+		make -f Makefile_osx
+		./homework4
+	
+	Linux:
+		make
+		./homework4
+		
+
+Completed Requirements
+======================
+
+
+Incomplete Requirements
+======================
+
+	
