@@ -76,7 +76,7 @@ void display(void){
 	glLoadIdentity();
 	// Set the camera
 	gluLookAt(cam.origin.x, cam.origin.y, cam.origin.z,
-			  cam.lookAt.x + cam.deltaAmt.x, cam.lookAt.y,  cam.lookAt.z + cam.deltaAmt.z,
+			  cam.lookAt.x, cam.lookAt.y,  cam.lookAt.z,
 			  cam.upVector.x, cam.upVector.y,  cam.upVector.z);
 	
 	// Draw ground
@@ -132,9 +132,9 @@ void onMouseDragCB(int x, int y){
 		switch (cameraState) {
 			case PAN_STATE:
 				if (x > prevX) {
-					cam.pan(1.0f);
+					cam.Turn(0.05f, 0, 1, 0);
 				} else {
-					cam.pan(-1.0f);
+					cam.Turn(-0.05f, 0, 1, 0);
 				}
 				break;
 			case ZOOM_STATE:
@@ -145,6 +145,11 @@ void onMouseDragCB(int x, int y){
 				}
 				break;
 			case ROTATE_STATE:
+				if (x > prevX) {
+					cam.roll(0.1);
+				} else {
+					cam.roll(-0.1);
+				}
 				break;
 			default:
 				break;
