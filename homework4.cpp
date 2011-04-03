@@ -21,10 +21,18 @@
 #include <iostream>
 #include "Camera.h"
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 320
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
+#define PAN_STATE 1
+#define ZOOM_STATE 2
+#define ROTATE_STATE 3
 
 Camera cam;
+
+int cameraState;
+bool isDragging;
+int prevX, prevY;
 
 // angle of rotation for the camera direction
 float angle=0.0;
@@ -68,7 +76,7 @@ void display(void){
 	glLoadIdentity();
 	// Set the camera
 	gluLookAt(cam.origin.x, cam.origin.y, cam.origin.z,
-			  cam.lookAt.x + cam.panAmount.x, cam.lookAt.y,  cam.lookAt.z + cam.panAmount.z,
+			  cam.lookAt.x + cam.deltaAmt.x, cam.lookAt.y,  cam.lookAt.z + cam.deltaAmt.z,
 			  cam.upVector.x, cam.upVector.y,  cam.upVector.z);
 	
 	// Draw ground
@@ -110,11 +118,52 @@ void changeSize(int w, int h) {
 }
 
 void onMouseCB(int button, int state, int x, int y) {
-	if( button == GLUT_LEFT_BUTTON && state == GLUT_UP ) {
-	
+	if( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN ) {
+		isDragging = true;
+		prevX = x;
+		prevY = y;
+	} else if( button == GLUT_LEFT_BUTTON && state == GLUT_UP ) {
+		isDragging = false;
 	}
-	
-	glutPostRedisplay();
+}
+
+void onMouseDragCB(int x, int y){
+	if (isDragging) {
+		switch (cameraState) {
+			case PAN_STATE:
+				if (x > prevX) {
+					cam.pan(1.0f);
+				} else {
+					cam.pan(-1.0f);
+				}
+				break;
+			case ZOOM_STATE:
+				if (y > prevY) {
+					cam.zoom(0.05f);
+				} else {
+					cam.zoom(-0.05f);
+				}
+				break;
+			case ROTATE_STATE:
+				break;
+			default:
+				break;
+		}
+		
+		prevX = x;
+		prevY = y;
+	}
+}
+
+void onKeyboardCB(unsigned char key, int x, int y) {
+	if (key == 'z'){
+		cameraState = ZOOM_STATE;
+	} else if (key == 'r'){
+		cameraState = ROTATE_STATE;
+	} else if (key == 'p') {
+		cameraState = PAN_STATE;
+	}
+
 }
 
 /*===================
@@ -132,13 +181,18 @@ void init(){
 	glutDisplayFunc(display); 
 	glutIdleFunc(display);
 	glutReshapeFunc(changeSize);
+	
 	glutMouseFunc(onMouseCB); 
+	glutMotionFunc(onMouseDragCB);
+	glutKeyboardFunc(onKeyboardCB);
 	
 	glEnable(GL_DEPTH_TEST);
 	
 	cam.init(1.0f, 1.0f, 5.0f,  
 			 0.0f, 1.0f, 0.0f,   
 			 0, 1, 0);
+	cameraState = PAN_STATE;
+	isDragging = false;
 }
 
 

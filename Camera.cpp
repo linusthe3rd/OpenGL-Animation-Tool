@@ -21,7 +21,7 @@ void Camera::init(float xOrigin, float yOrigin, float zOrigin,
 	this->origin = Point3f(xOrigin, yOrigin, zOrigin);
 	this->lookAt = Point3f(xLookAt, yLookAt, zLookAt);
 	this->upVector = Point3f(xUpVector, yUpVector, zUpVector);
-	this->panAmount = Point3f(0.0f, 0.0f, -1.0f);
+	this->deltaAmt = Point3f(0.0f, 0.0f, -1.0f);
 	
 }
 
@@ -42,11 +42,33 @@ void Camera::setUpVector(float x, float y, float z){
 }
 
 void Camera::pan(float angle){
-	this->panAmount.x += sin(angle);
-	this->panAmount.z += -cos(angle);
+	this->deltaAmt.x += sin(angle);
+	this->deltaAmt.z += -cos(angle);
+}
+
+void Camera::pan(int newX, int newY){
+	int v[3] = { 
+		this->lookAt.x - this->origin.x,
+		this->lookAt.y - this->origin.y,
+		this->lookAt.z - this->origin.z
+	};
+	
+	int q[3] = { 
+		newX - this->origin.x,
+		this->lookAt.y - this->origin.y,
+		this->lookAt.z - this->origin.z
+	};
+	
+	float mags = magnitude(v) * magnitude(q);
+	float value = dotProduct(v, q) / mags;
+	float angle = acos(value);
+	
+	this->pan(angle);
 }
 
 void Camera::zoom(float amount){
-	this->lookAt.x = this->panAmount.x * amount;
-	this->lookAt.z = this->panAmount.z * amount;
+	this->origin.x += this->deltaAmt.x * amount;
+	this->lookAt.x += this->deltaAmt.x * amount;
+	this->origin.z += this->deltaAmt.z * amount;
+	this->lookAt.z += this->deltaAmt.z * amount;
 }

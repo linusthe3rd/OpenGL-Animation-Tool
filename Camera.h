@@ -10,12 +10,13 @@
 #define CAMERA_H
 
 #include "Point3f.h"
+#include "VectorsUtil.h"
 
 class Camera {
 public:
 	Point3f origin;
 	Point3f lookAt;
-	Point3f panAmount;
+	Point3f deltaAmt;
 	Point3f upVector;
 	
 	Camera();
@@ -28,6 +29,7 @@ public:
 	void setLookAt(float x, float y, float z);
 	void setUpVector(float x, float y, float z);
 	void pan(float angle);
+	void pan(int newX, int newY);
 	void zoom(float amount);
 };
 
