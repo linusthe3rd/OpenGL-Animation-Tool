@@ -27,6 +27,7 @@ class BodyPart {
 protected:
 	Point3f location;
 	Volume vol;
+	GLfloat ambient[4], diffuse[4], specular[4], shine;
 
 public:
 	BodyPart(float x, float y, float z, float width=1.0f, float height=1.0f, float depth=1.0f);
@@ -37,8 +38,19 @@ public:
 	void setVolume(float width, float height, float depth);
 	Volume getVolume();
 	
-	bool contains(int x, int y);	
+	void setAmbientLightColor(float r, float g, float b, float a);
+	GLfloat* getAmbientLightColor();
 	
+	void setDiffuseLightColor(float r, float g, float b, float a);
+	GLfloat* getDiffuseLightColor();
+	
+	void setSpecularLightColor(float r, float g, float b, float a);
+	GLfloat* getSpecularLightColor();
+	
+	void setShininess(float value);
+	GLfloat getShininess();
+	
+	bool contains(int x, int y);	
 	void draw();
 };
 #endif

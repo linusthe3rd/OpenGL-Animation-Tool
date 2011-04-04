@@ -49,7 +49,15 @@ void display(void){
 			  cam.upVector.x, cam.upVector.y,  cam.upVector.z);
 	
 	// Draw floor
-	glColor3f(0.9f, 0.9f, 0.9f);
+	GLfloat ambient[] = {0.9f, 0.9f, 0.9f, 1.0};
+	GLfloat diffuse[] = {0.9f, 0.9f, 0.9f, 1.0};
+	GLfloat specular[] = {0.9f, 0.9f, 0.9f, 1.0};
+	GLfloat shine = 100.0;
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+	glMaterialf(GL_FRONT, GL_SHININESS, shine);
+	
 	glBegin(GL_QUADS);
 		glVertex3f(-100.0f, 0.0f, -100.0f);
 		glVertex3f(-100.0f, 0.0f,  100.0f);
@@ -57,6 +65,7 @@ void display(void){
 		glVertex3f( 100.0f, 0.0f, -100.0f);
 	glEnd();
 	
+	//draw robot
 	box->draw();
 	
 	glutSwapBuffers();
@@ -154,6 +163,9 @@ void init(){
 	glutKeyboardFunc(onKeyboardCB);
 	
 	glEnable(GL_DEPTH_TEST);
+	
+	glEnable (GL_LIGHTING);
+    glEnable (GL_LIGHT0);
 	
 	cam.init(1.0f, 1.0f, 5.0f,  
 			 0.0f, 1.0f, 0.0f,   
