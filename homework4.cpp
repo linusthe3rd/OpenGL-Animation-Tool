@@ -167,6 +167,8 @@ void init(){
 	glEnable (GL_LIGHTING);
     glEnable (GL_LIGHT0);
 	
+	glEnable(GL_TEXTURE_2D);
+	
 	cam.init(1.0f, 1.0f, 5.0f,  
 			 0.0f, 1.0f, 0.0f,   
 			 0, 1, 0);
@@ -174,6 +176,7 @@ void init(){
 	isDragging = false;
 	
 	box = new BodyPart(0.0f, 1.0f, 0.0f);
+	box->setTextureImg("color_rows.bmp");
 }
 
 

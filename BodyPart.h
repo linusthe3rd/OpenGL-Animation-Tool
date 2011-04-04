@@ -21,6 +21,12 @@
 
 #include "Point3f.h"
 #include "Volume.h"
+#include "stb_image.h"
+
+struct Image_t {
+	int width, height, n;
+	unsigned char *data;
+};
 
 class BodyPart {
 	
@@ -28,7 +34,9 @@ protected:
 	Point3f location;
 	Volume vol;
 	GLfloat ambient[4], diffuse[4], specular[4], shine;
-
+	Image_t textureImg;
+	GLuint texture[1];
+	
 public:
 	BodyPart(float x, float y, float z, float width=1.0f, float height=1.0f, float depth=1.0f);
 	
@@ -49,6 +57,8 @@ public:
 	
 	void setShininess(float value);
 	GLfloat getShininess();
+	
+	void setTextureImg(char *filename);
 	
 	bool contains(int x, int y);	
 	void draw();

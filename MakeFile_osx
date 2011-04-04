@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall 
 LDFLAGS= -framework OpenGL -framework GLUT
-SOURCES=homework4.cpp Camera.cpp BodyPart.cpp
+SOURCES=homework4.cpp Camera.cpp BodyPart.cpp stb_image.c
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=project1
 
