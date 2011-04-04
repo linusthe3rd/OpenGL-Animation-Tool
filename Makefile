@@ -2,9 +2,9 @@
 CC=g++
 CFLAGS=-c -Wall 
 LDFLAGS= -lglut -lGL -lGLU
-SOURCES=homework4.cpp Camera.cpp BodyPart.cpp stb_image.c
+SOURCES=homework4.cpp Camera.cpp Robot.cpp BodyPart.cpp stb_image.c
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=project1
+EXECUTABLE=homework4
 
 all: $(SOURCES) $(EXECUTABLE)
 	

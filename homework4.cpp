@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include "Camera.h"
-#include "BodyPart.h"
+#include "Robot.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -34,7 +34,7 @@ int cameraState;
 bool isDragging;
 int prevX, prevY;
 
-BodyPart *box;
+Robot *robot;
 
 void display(void){
 	// Clear Color and Depth Buffers
@@ -66,7 +66,7 @@ void display(void){
 	glEnd();
 	
 	//draw robot
-	box->draw();
+	robot->draw();
 	
 	glutSwapBuffers();
 }
@@ -169,14 +169,13 @@ void init(){
 	
 	glEnable(GL_TEXTURE_2D);
 	
-	cam.init(1.0f, 1.0f, 5.0f,  
+	cam.init(2.0f, 1.0f, 5.0f,  
 			 0.0f, 1.0f, 0.0f,   
 			 0, 1, 0);
 	cameraState = PAN_STATE;
 	isDragging = false;
 	
-	box = new BodyPart(0.0f, 1.0f, 0.0f);
-	box->setTextureImg("color_rows.bmp");
+	robot = new Robot();
 }
 
 

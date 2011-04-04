@@ -43,6 +43,8 @@ Completed Requirements
 ======================
 
 	- Draw a floor
+	- Each body part has its own lighting material property
+	- Each body part has its own texture 
 	- Use mouse to pan, zoom, and rotate the camera
 
 Incomplete Requirements

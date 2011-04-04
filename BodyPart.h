@@ -19,6 +19,10 @@
 	#include <GL/glu.h>
 #endif
 
+#include <vector>
+
+using namespace std;
+
 #include "Point3f.h"
 #include "Volume.h"
 #include "stb_image.h"
@@ -26,6 +30,10 @@
 struct Image_t {
 	int width, height, n;
 	unsigned char *data;
+};
+
+struct Rotation_t {
+	float angle, x, y, z;
 };
 
 class BodyPart {
@@ -36,6 +44,8 @@ protected:
 	GLfloat ambient[4], diffuse[4], specular[4], shine;
 	Image_t textureImg;
 	GLuint texture[1];
+	vector<Rotation_t> rotations;
+	
 	
 public:
 	BodyPart(float x, float y, float z, float width=1.0f, float height=1.0f, float depth=1.0f);
@@ -59,6 +69,8 @@ public:
 	GLfloat getShininess();
 	
 	void setTextureImg(char *filename);
+	
+	void rotate(float angle, float x, float y, float z);
 	
 	bool contains(int x, int y);	
 	void draw();

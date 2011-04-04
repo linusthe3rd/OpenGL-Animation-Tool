@@ -97,12 +97,18 @@ void BodyPart::setTextureImg(char *filename){
 	
 	glGenTextures(1, &texture[0]);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	
 	glTexImage2D(GL_TEXTURE_2D,0,3,this->textureImg.width,this->textureImg.height,0,GL_RGB,GL_UNSIGNED_BYTE,this->textureImg.data);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+}
+
+void BodyPart::rotate(float angle, float x, float y, float z){
+	Rotation_t r;
+	
+	r.angle = angle;
+	r.x = x;
+	r.y = y;
+	r.z = z;
+	
+	rotations.push_back(r);
 }
 
 bool BodyPart::contains(int x, int y){
@@ -113,8 +119,8 @@ void BodyPart::draw(){
 	GLfloat minX = this->location.x - ( this->vol.w / 2 );
 	GLfloat maxX = this->location.x + ( this->vol.w / 2 );
 	
-	GLfloat minY = this->location.y;
-	GLfloat maxY = this->location.y + this->vol.h;
+	GLfloat maxY = this->location.y;
+	GLfloat minY = this->location.y - this->vol.h;
 	
 	GLfloat minZ = this->location.z - ( this->vol.d / 2 );
 	GLfloat maxZ = this->location.z + ( this->vol.d / 2 );
@@ -123,6 +129,12 @@ void BodyPart::draw(){
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, this->diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, this->specular);
 	glMaterialf(GL_FRONT, GL_SHININESS, this->shine);
+	
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	
 	glBegin(GL_QUADS);
 		//Draw top and bottom faces
