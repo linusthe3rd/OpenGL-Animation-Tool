@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include "Camera.h"
+#include "BodyPart.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -29,43 +30,11 @@
 #define ROTATE_STATE 3
 
 Camera cam;
-
 int cameraState;
 bool isDragging;
 int prevX, prevY;
 
-// angle of rotation for the camera direction
-float angle=0.0;
-// actual vector representing the camera's direction
-float lx=0.0f,lz=-1.0f;
-// XZ position of the camera
-float x=0.0f,z=5.0f;
-void drawSnowMan() {
-	
-	glColor3f(1.0f, 1.0f, 1.0f);
-	
-	// Draw Body
-	glTranslatef(0.0f ,0.75f, 0.0f);
-	glutSolidSphere(0.75f,20,20);
-	
-	// Draw Head
-	glTranslatef(0.0f, 1.0f, 0.0f);
-	glutSolidSphere(0.25f,20,20);
-	
-	// Draw Eyes
-	glPushMatrix();
-	glColor3f(0.0f,0.0f,0.0f);
-	glTranslatef(0.05f, 0.10f, 0.18f);
-	glutSolidSphere(0.05f,10,10);
-	glTranslatef(-0.1f, 0.0f, 0.0f);
-	glutSolidSphere(0.05f,10,10);
-	glPopMatrix();
-	
-	// Draw Nose
-	glColor3f(1.0f, 0.5f , 0.5f);
-	glRotatef(0.0f,1.0f, 0.0f, 0.0f);
-	glutSolidCone(0.08f,0.5f,10,2);
-}
+BodyPart *box;
 
 void display(void){
 	// Clear Color and Depth Buffers
@@ -79,7 +48,7 @@ void display(void){
 			  cam.lookAt.x, cam.lookAt.y,  cam.lookAt.z,
 			  cam.upVector.x, cam.upVector.y,  cam.upVector.z);
 	
-	// Draw ground
+	// Draw floor
 	glColor3f(0.9f, 0.9f, 0.9f);
 	glBegin(GL_QUADS);
 		glVertex3f(-100.0f, 0.0f, -100.0f);
@@ -88,14 +57,7 @@ void display(void){
 		glVertex3f( 100.0f, 0.0f, -100.0f);
 	glEnd();
 	
-	// Draw 36 SnowMen
-	for(int i = -3; i < 3; i++)
-		for(int j=-3; j < 3; j++) {
-			glPushMatrix();
-			glTranslatef(i*10.0,0,j * 10.0);
-			drawSnowMan();
-			glPopMatrix();
-		}
+	box->draw();
 	
 	glutSwapBuffers();
 }
@@ -132,9 +94,9 @@ void onMouseDragCB(int x, int y){
 		switch (cameraState) {
 			case PAN_STATE:
 				if (x > prevX) {
-					cam.Turn(0.05f, 0, 1, 0);
+					cam.turn(0.05f, 0, 1, 0);
 				} else {
-					cam.Turn(-0.05f, 0, 1, 0);
+					cam.turn(-0.05f, 0, 1, 0);
 				}
 				break;
 			case ZOOM_STATE:
@@ -198,6 +160,8 @@ void init(){
 			 0, 1, 0);
 	cameraState = PAN_STATE;
 	isDragging = false;
+	
+	box = new BodyPart(0.0f, 1.0f, 0.0f);
 }
 
 

@@ -10,6 +10,18 @@ Description
 Instructions
 ============
 
+	Turn Camera
+		- Default state when program starts.
+		- Press "p" to enter this state
+		- Drag mouse left and right to make camera pan
+	
+	Zoom Camera
+		- Press "z" to enter zoom state
+		- Drag mouse up and down to make the camera zoom
+	
+	Rotate Camera
+		- Press "r" to enter the rotate state
+		- Drag mouse left and right to rotate the camera about the z axis
 	
 		
 Program Execution Instructions
@@ -27,6 +39,8 @@ Program Execution Instructions
 Completed Requirements
 ======================
 
+	- Draw a floor
+	- Use mouse to pan, zoom, and rotate the camera
 
 Incomplete Requirements
 ======================
