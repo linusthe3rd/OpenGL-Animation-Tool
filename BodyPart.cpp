@@ -13,19 +13,19 @@ BodyPart::BodyPart(float x, float y, float z, float width, float height, float d
 	this->location = Point3f(x, y, z);
 	this->vol = Volume(width, height, depth);
 	
-	this->ambient[0] = 0.2;  
-	this->ambient[1] = 0.2;
-	this->ambient[2] = 0.2;
+	this->ambient[0] = 0.9;  
+	this->ambient[1] = 0.9;
+	this->ambient[2] = 0.9;
 	this->ambient[3] = 1.0;
 	
-	this->diffuse[0] = 1.0;  
-	this->diffuse[1] = 0.8;
-	this->diffuse[2] = 0.0;
+	this->diffuse[0] = 0.9;  
+	this->diffuse[1] = 0.9;
+	this->diffuse[2] = 0.9;
 	this->diffuse[3] = 1.0;
 	
-	this->specular[0] = 1.0;  
-	this->specular[1] = 1.0;
-	this->specular[2] = 1.0;
+	this->specular[0] = 0.9;  
+	this->specular[1] = 0.9;
+	this->specular[2] = 0.9;
 	this->specular[3] = 1.0;
 	
 	this->shine = 100.0f;
@@ -140,40 +140,40 @@ void BodyPart::draw(){
 		//Draw top and bottom faces
 		glNormal3f(0, 1.0f, 0);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f( minX, minY, minZ);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( minX, minY, maxZ);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, minY, maxZ);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f( maxX, minY, maxZ);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( maxX, minY, minZ);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, minY, minZ);
 		
 		glNormal3f(0, -1.0f, 0);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, maxY, minZ);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( minX, maxY, maxZ);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, maxY, maxZ);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( maxX, maxY, minZ);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( minX, maxY, minZ);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, maxY, maxZ);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( maxX, maxY, maxZ);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, maxY, minZ);
 	
 		//draw left and right face
 		glNormal3f(-1.0f, 0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( minX, minY, minZ);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( minX, minY, maxZ);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, maxY, maxZ);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( minX, maxY, minZ);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( minX, minY, minZ);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, minY, maxZ);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( minX, maxY, maxZ);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( minX, maxY, minZ);
 	
 		glNormal3f(1.0f, 0, 0);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( maxX, minY, minZ);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, minY, minZ);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f( maxX, minY, maxZ);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, maxY, maxZ);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( maxX, maxY, maxZ);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, maxY, minZ);
 	
 		//draw front and back faces
-		glNormal3f(0, 0, -1.0f);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( minX, minY, minZ);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( minX, maxY, minZ);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( maxX, maxY, minZ);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, minY, minZ);
-	
 		glNormal3f(0, 0, 1.0f);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( minX, minY, maxZ);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, maxY, maxZ);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, maxY, maxZ);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, minY, maxZ);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, minY, maxZ);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( minX, maxY, maxZ);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, maxY, maxZ);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, minY, maxZ);
+		
+		glNormal3f(0, 0, -1.0f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f( minX, minY, minZ);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f( minX, maxY, minZ);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, maxY, minZ);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, minY, minZ);
 	glEnd();
 }
