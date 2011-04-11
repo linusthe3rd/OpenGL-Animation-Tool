@@ -2,8 +2,7 @@
  *  Point3f.h
  *  Homework4
  *
- *  Created by John Ryding on 4/2/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *  A struct representing a 3D point.
  *
  */
 #ifndef _POINT3F_H_
