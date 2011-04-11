@@ -1,20 +1,18 @@
-/*
- *  Camera.cpp
- *  Homework4
- *
- *  Created by John Ryding on 4/2/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
- *
- */
-
 #include "Camera.h"
 
+/**
+ * Create a new camera object
+ */
 Camera::Camera(){
 	init(0, 0, 0,
 		 0, 0, 0,
 		 0, 1, 0);
 }
 
+/**
+ * Initialize the camera object according to the same parameters
+ * used in gluLookAt.
+ */
 void Camera::init(float xOrigin, float yOrigin, float zOrigin,
 				  float xLookAt, float yLookAt, float zLookAt,
 				  float xUpVector, float yUpVector, float zUpVector){
@@ -23,22 +21,42 @@ void Camera::init(float xOrigin, float yOrigin, float zOrigin,
 	this->upVector = Point3f(xUpVector, yUpVector, zUpVector);
 }
 
+/**
+ * Set the location of the camera.
+ */
 void Camera::setOrigin(float x, float y, float z){
 	this->origin.x = x;
 	this->origin.y = y;
 	this->origin.z = z;
 }
+
+/**
+ * Set the point that the camera will look at.
+ */
 void Camera::setLookAt(float x, float y, float z){
 	this->lookAt.x = x;
 	this->lookAt.y = y;
 	this->lookAt.z = z;
 }
+
+/**
+ * Set the up vector of camera.
+ */
 void Camera::setUpVector(float x, float y, float z){
 	this->upVector.x = x;
 	this->upVector.y = y;
 	this->upVector.z = z;
 }
 
+/**
+ * Pan the camera by the given angle around the given axis.
+ *
+ * Params
+ *	angle - the amount the camera should turn
+ *	x - the x-axis, should be 0 or 1
+ *	y - the y-axis, should be 0 or 1
+ *	z - the z-axis, should be 0 or 1
+ */
 void Camera::turn(float angle, float x, float y, float z){
 	// Store the new focus point
 	Point3f newFocus;
@@ -72,11 +90,23 @@ void Camera::turn(float angle, float x, float y, float z){
 	this->lookAt.z = this->origin.z + newFocus.z; 
 }
 
+/**
+ * Rotate the camera around the z-axis by the given angle.
+ *
+ * Params
+ *	angle - the amount the camera should rotate
+ */
 void Camera::roll(float angle){
 	this->upVector.x = cos(angle) * this->upVector.x + sin(angle) * this->upVector.y;
 	this->upVector.y = -sin(angle) * this->upVector.x + cos(angle) * this->upVector.y;
 }
 
+/**
+ * Change the camera's position along the z-axis
+ *
+ * Params
+ *	amount - the amount the camera should move
+ */
 void Camera::zoom(float amount){
 	Point3f view;
 	view.x = this->lookAt.x - this->origin.x;

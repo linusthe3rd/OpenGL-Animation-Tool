@@ -2,8 +2,7 @@
  *  Robot.h
  *  Homework4
  *
- *  Created by John Ryding on 4/4/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *  A class that will draw a robot in a window.
  *
  */
 

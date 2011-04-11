@@ -1,19 +1,9 @@
-/*
- *  Robot.cpp
- *  Homework4
- *
- *  Created by John Ryding on 4/4/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
- *
- */
-
 #include "Robot.h"
 
-//BodyPart *lUpperArm, *lLowerArm, *rUpperArm, *rLowerArm;
-//BodyPart *lHand, *rHand;
-//BodyPart *lUpperLeg, *lLowerLeg, *rUpperLeg, *rLowerLeg;
-//BodyPart *lFoor, *rFoot;
-
+/**
+ * Create a new robot. This will initialize all of the body parts
+ * that the robot will have.s
+ */
 Robot::Robot(){
 	this->head = new BodyPart(0.0f, 2.5f, 0.0f, 0.5f, 0.5f, 0.5f);
 	this->head->setTextureImg("Baboon.bmp");
@@ -108,6 +98,9 @@ Robot::Robot(){
 	this->lFoot->setSpecularLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
+/**
+ * Draw each of the robot's limbs
+ */
 void Robot::draw(){
 	this->head->draw();
 	

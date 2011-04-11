@@ -1,14 +1,8 @@
-/*
- *  BodyPart.cpp
- *  Homework4
- *
- *  Created by John Ryding on 4/3/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
- *
- */
-
 #include "BodyPart.h"
 
+/**
+ * Create a new body part with a position and volume
+ */
 BodyPart::BodyPart(float x, float y, float z, float width, float height, float depth)  {
 	this->location = Point3f(x, y, z);
 	this->vol = Volume(width, height, depth);
@@ -31,26 +25,41 @@ BodyPart::BodyPart(float x, float y, float z, float width, float height, float d
 	this->shine = 100.0f;
 }
 
+/**
+ * Set the location of the body part.
+ */
 void BodyPart::setLocation(float x, float y, float z){
 	this->location.x = x;
 	this->location.y = y;
 	this->location.z = z;
 }
 
+/**
+ * Get the location of the body part.
+ */
 Point3f BodyPart::getLocation(){
 	return this->location;
 }
 
+/**
+ * Set the volume of the body part.
+ */
 void BodyPart::setVolume(float width, float height, float depth){
 	this->vol.w = width;
 	this->vol.h = height;
 	this->vol.d = depth;
 }
 
+/**
+ * Get the volume of the body part.
+ */
 Volume BodyPart::getVolume(){
 	return this->vol;
 }
 
+/**
+ * Set the ambient lighting value of the body part.
+ */
 void BodyPart::setAmbientLightColor(float r, float g, float b, float a){
 	this->ambient[0] = r;
 	this->ambient[1] = g;
@@ -58,10 +67,16 @@ void BodyPart::setAmbientLightColor(float r, float g, float b, float a){
 	this->ambient[3] = a;
 }
 
+/**
+ * Get the ambient lighting value of the body part.
+ */
 GLfloat* BodyPart::getAmbientLightColor(){
 	return this->ambient;
 }
 
+/**
+ * Set the diffuse lighting value of the body part.
+ */
 void BodyPart::setDiffuseLightColor(float r, float g, float b, float a){
 	this->diffuse[0] = r;
 	this->diffuse[1] = g;
@@ -69,10 +84,16 @@ void BodyPart::setDiffuseLightColor(float r, float g, float b, float a){
 	this->diffuse[3] = a;
 }
 
+/**
+ * Get the diffuse lighting value of the body part.
+ */
 GLfloat* BodyPart::getDiffuseLightColor(){
 	return this->diffuse;
 }
 
+/**
+ * Set the specular lighting value of the body part.
+ */
 void BodyPart::setSpecularLightColor(float r, float g, float b, float a){
 	this->specular[0] = r;
 	this->specular[1] = g;
@@ -80,18 +101,33 @@ void BodyPart::setSpecularLightColor(float r, float g, float b, float a){
 	this->specular[3] = a;
 }
 
+/**
+ * Get the specular lighting value of the body part.
+ */
 GLfloat* BodyPart::getSpecularLightColor(){
 	return this->specular;
 }
 
+/**
+ * Set the shininess value of the body part.
+ */
 void BodyPart::setShininess(float value){
 	this->shine = value;
 }
 
+/**
+ * Get the shininess value of the body part.
+ */
 GLfloat BodyPart::getShininess(){
 	return this->shine;
 }
 
+/**
+ * Set the texture the body part should use in rendering.
+ *
+ * Params
+ *	filename - the path to the image file that will be used as the texture.
+ */
 void BodyPart::setTextureImg(char *filename){
 	this->textureImg.data = stbi_load(filename, &this->textureImg.width, &this->textureImg.height, &this->textureImg.n, 0);
 	
@@ -100,6 +136,15 @@ void BodyPart::setTextureImg(char *filename){
 	glTexImage2D(GL_TEXTURE_2D,0,3,this->textureImg.width,this->textureImg.height,0,GL_RGB,GL_UNSIGNED_BYTE,this->textureImg.data);
 }
 
+/**
+ * Add a rotation transformation to the body part's position.
+ *
+ * Params
+ *	angle - the amount to rotate
+ *	x - the x-axis, should be 0 or 1
+ *	y - the y-axis, should be 0 or 1
+ *	z - the z-axis, should be 0 or 1
+ */
 void BodyPart::rotate(float angle, float x, float y, float z){
 	Rotation_t r;
 	
@@ -111,10 +156,16 @@ void BodyPart::rotate(float angle, float x, float y, float z){
 	rotations.push_back(r);
 }
 
+/**
+ * Determine if a given mouse x,y coordinate is within the bounds of the body part.
+ */
 bool BodyPart::contains(int x, int y){
 	return false;
 }
 
+/**
+ * Draw the body part in the window.
+ */
 void BodyPart::draw(){
 	GLfloat minX = this->location.x - ( this->vol.w / 2 );
 	GLfloat maxX = this->location.x + ( this->vol.w / 2 );

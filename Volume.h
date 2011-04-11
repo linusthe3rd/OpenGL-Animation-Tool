@@ -2,8 +2,7 @@
  *  Volume.h
  *  Homework4
  *
- *  Created by John Ryding on 4/3/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *  A struct representing a volume (width, depth, height).
  *
  */
 #ifndef _VOLUME_H_

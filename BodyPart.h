@@ -2,8 +2,7 @@
  *  BodyPart.h
  *  Homework4
  *
- *  Created by John Ryding on 4/3/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *  A class that represents a body part of a robot.
  *
  */
 #ifndef BODYPART_H

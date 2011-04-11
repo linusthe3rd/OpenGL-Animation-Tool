@@ -2,8 +2,8 @@
  *  Camera.h
  *  Homework4
  *
- *  Created by John Ryding on 4/2/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *  Class that abstracts the underlying processing
+ *  of a camera's position in a 3D environment.
  *
  */
 #ifndef CAMERA_H
