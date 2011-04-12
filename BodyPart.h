@@ -1,6 +1,6 @@
 /*
  *  BodyPart.h
- *  Homework4
+ *  Project 2
  *
  *  A class that represents a body part of a robot.
  *
@@ -32,7 +32,13 @@ struct Image_t {
 };
 
 struct Rotation_t {
-	float angle, x, y, z;
+	float x, y, z;
+	
+	Rotation_t(){
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+	}
 };
 
 class BodyPart {
@@ -43,7 +49,7 @@ protected:
 	GLfloat ambient[4], diffuse[4], specular[4], shine;
 	Image_t textureImg;
 	GLuint texture[1];
-	vector<Rotation_t> rotations;
+	Rotation_t rotations;
 	
 	
 public:
@@ -70,6 +76,7 @@ public:
 	void setTextureImg(char *filename);
 	
 	void rotate(float angle, float x, float y, float z);
+	Rotation_t getRotation();
 	
 	bool contains(int x, int y);	
 	void draw();

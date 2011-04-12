@@ -2,7 +2,7 @@
 CC=g++
 CFLAGS=-c -Wall 
 LDFLAGS= -lglut -lGL -lGLU
-SOURCES=homework4.cpp Camera.cpp Robot.cpp BodyPart.cpp stb_image.c
+SOURCES=project2.cpp Camera.cpp Robot.cpp BodyPart.cpp stb_image.c
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=homework4
 

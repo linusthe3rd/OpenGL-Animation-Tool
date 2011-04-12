@@ -6,6 +6,7 @@
 BodyPart::BodyPart(float x, float y, float z, float width, float height, float depth)  {
 	this->location = Point3f(x, y, z);
 	this->vol = Volume(width, height, depth);
+	this->rotations = Rotation_t();
 	
 	this->ambient[0] = 0.9;  
 	this->ambient[1] = 0.9;
@@ -146,14 +147,17 @@ void BodyPart::setTextureImg(char *filename){
  *	z - the z-axis, should be 0 or 1
  */
 void BodyPart::rotate(float angle, float x, float y, float z){
-	Rotation_t r;
-	
-	r.angle = angle;
-	r.x = x;
-	r.y = y;
-	r.z = z;
-	
-	rotations.push_back(r);
+	if (x == 1.0) {
+		this->rotations.x += angle;
+	} else if (y == 1.0) {
+		this->rotations.y += angle;
+	} else if (z == 1.0) {
+		this->rotations.z += angle;
+	}
+}
+
+Rotation_t BodyPart::getRotation(){
+	return this->rotations;
 }
 
 /**
@@ -186,6 +190,10 @@ void BodyPart::draw(){
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	
+	glRotatef(this->rotations.x, 1.0, 0.0, 0.0);
+	glRotatef(this->rotations.y, 0.0, 1.0, 0.0);
+	glRotatef(this->rotations.z, 0.0, 0.0, 1.0);
 	
 	glBegin(GL_QUADS);
 		//Draw top and bottom faces

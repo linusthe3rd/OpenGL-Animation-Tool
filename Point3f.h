@@ -1,6 +1,6 @@
 /*
  *  Point3f.h
- *  Homework4
+ *  Project 2
  *
  *  A struct representing a 3D point.
  *

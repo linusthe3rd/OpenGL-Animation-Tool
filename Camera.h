@@ -1,6 +1,6 @@
 /*
  *  Camera.h
- *  Homework4
+ *  Project 2
  *
  *  Class that abstracts the underlying processing
  *  of a camera's position in a 3D environment.

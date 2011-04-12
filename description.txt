@@ -1,7 +1,7 @@
-CS 4204 - Homework 4
+CS 4204 - Project 2
 
 Author: John Ryding
-Date: 4/2/11
+Date: 4/17/11
 
 Description
 ===========
@@ -27,6 +27,15 @@ Instructions
 	Rotate Camera
 		- Press "r" to enter the rotate state
 		- Drag mouse left and right to rotate the camera about the z axis
+		
+	Edit Limb Positions
+		- Press "e" to enter this state
+		- Right click the mouse to choose the limb to edit
+		- Press 1,2,3 to determine the axis of rotation
+			1: rotate the limb about the x-axis, default state
+			2: rotate the limb about the y-axis
+			3. rotate the limb about the z-axis
+		- Drag the mouse left and right to change the rotation angle of the limb
 	
 		
 Program Execution Instructions
@@ -34,11 +43,11 @@ Program Execution Instructions
 
 	Mac:
 		make -f Makefile_osx
-		./homework4
+		./project2
 	
 	Linux:
 		make
-		./homework4
+		./project2
 		
 
 Completed Requirements

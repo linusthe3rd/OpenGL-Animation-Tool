@@ -1,6 +1,6 @@
 /*
  *  Robot.h
- *  Homework4
+ *  Project 2
  *
  *  A class that will draw a robot in a window.
  *
@@ -16,9 +16,12 @@ private:
 	BodyPart *lHand, *rHand;
 	BodyPart *lUpperLeg, *lLowerLeg, *rUpperLeg, *rLowerLeg;
 	BodyPart *lFoot, *rFoot;
+	BodyPart *curLimb;
 	
 public:
 	Robot();
 	
+	void rotateLimb(float angle, float x, float y, float z);
+	void setEditableLimb(int limb);
 	void draw();
 };

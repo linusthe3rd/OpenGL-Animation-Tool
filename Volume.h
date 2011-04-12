@@ -1,6 +1,6 @@
 /*
  *  Volume.h
- *  Homework4
+ *  Project 2
  *
  *  A struct representing a volume (width, depth, height).
  *

@@ -1,5 +1,21 @@
 #include "Robot.h"
 
+#define HEAD 0
+#define UPPER_TORSO 1
+#define LOWER_TORSO 2
+#define UPPER_LEFT_ARM 3
+#define	LOWER_LEFT_ARM 4
+#define LEFT_HAND 5
+#define UPPER_RIGHT_ARM 6
+#define LOWER_RIGHT_ARM 7
+#define RIGHT_HAND 8
+#define UPPER_LEFT_LEG 9
+#define LOWER_LEFT_LEG 10
+#define LEFT_FOOT 11
+#define UPPER_RIGHT_LEG 12
+#define LOWER_RIGHT_LEG 13
+#define RIGHT_FOOT 14
+
 /**
  * Create a new robot. This will initialize all of the body parts
  * that the robot will have.s
@@ -96,6 +112,62 @@ Robot::Robot(){
 	this->lFoot->setAmbientLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 	this->lFoot->setDiffuseLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 	this->lFoot->setSpecularLightColor(0.0f, 0.0f, 1.0f, 1.0f);
+}
+
+void Robot::rotateLimb(float angle, float x, float y, float z){
+	this->curLimb->rotate(angle, x, y, z);
+}
+
+void Robot::setEditableLimb(int limb){
+	switch (limb) {
+		case HEAD:
+			this->curLimb = this->head;
+			break;
+		case UPPER_TORSO:
+			this->curLimb = this->upperTorso;
+			break;
+		case LOWER_TORSO:
+			this->curLimb = this->lowerTorso;
+			break;
+		case UPPER_LEFT_ARM:
+			this->curLimb = this->lUpperArm;
+			break;
+		case LOWER_LEFT_ARM:
+			this->curLimb = this->lLowerArm;
+			break;
+		case LEFT_HAND:
+			this->curLimb = this->lHand;
+			break;
+		case UPPER_RIGHT_ARM:
+			this->curLimb = this->rUpperArm;
+			break;
+		case LOWER_RIGHT_ARM:
+			this->curLimb = this->rLowerArm;
+			break;
+		case RIGHT_HAND:
+			this->curLimb = this->rHand;
+			break;
+		case UPPER_LEFT_LEG:
+			this->curLimb = this->lUpperLeg;
+			break;
+		case LOWER_LEFT_LEG:
+			this->curLimb = this->lLowerLeg;
+			break;
+		case LEFT_FOOT:
+			this->curLimb = this->lFoot;
+			break;
+		case UPPER_RIGHT_LEG:
+			this->curLimb = this->rUpperLeg;
+			break;
+		case LOWER_RIGHT_LEG:
+			this->curLimb = this->rLowerLeg;
+			break;
+		case RIGHT_FOOT:
+			this->curLimb = this->rFoot;
+			break;
+		default:
+			break;
+	}	
 }
 
 /**

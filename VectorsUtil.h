@@ -1,6 +1,6 @@
 /*
  *  Vectors.h
- *  Homework4
+ *  Project 2
  *
  *  A util class that defines vector formulas
  *
