@@ -174,25 +174,56 @@ void Robot::setEditableLimb(int limb){
  * Draw each of the robot's limbs
  */
 void Robot::draw(){
-	this->head->draw();
+	glPushMatrix();
+		this->upperTorso->draw();
 	
-	this->upperTorso->draw();
-	this->lowerTorso->draw();
+		glPushMatrix();
+			this->head->draw();
+		glPopMatrix();
+		
+		glPushMatrix();
+			this->rUpperArm->draw();
+			glPushMatrix();
+				this->rLowerArm->draw();
+				glPushMatrix();
+					this->rHand->draw();
+				glPopMatrix();
+			glPopMatrix();
+		glPopMatrix();
+		
+		glPushMatrix();
+			this->lUpperArm->draw();
+			glPushMatrix();
+				this->lLowerArm->draw();
+				glPushMatrix();
+					this->lHand->draw();
+				glPopMatrix();
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
 	
-	this->rUpperArm->draw();
-	this->rLowerArm->draw();
-	this->rHand->draw();
+	glPushMatrix();
+		this->lowerTorso->draw();
+		
+		glPushMatrix();
+			this->rUpperLeg->draw();
+			glPushMatrix();
+				this->rLowerLeg->draw();
+				glPushMatrix();
+					this->rFoot->draw();
+				glPopMatrix();
+			glPopMatrix();
+		glPopMatrix();
 	
-	this->lUpperArm->draw();
-	this->lLowerArm->draw();
-	this->lHand->draw();
-	
-	this->rUpperLeg->draw();
-	this->rLowerLeg->draw();
-	this->rFoot->draw();
-	
-	this->lUpperLeg->draw();
-	this->lLowerLeg->draw();
-	this->lFoot->draw();
+		glPushMatrix();
+			this->lUpperLeg->draw();
+			glPushMatrix();
+				this->lLowerLeg->draw();
+				glPushMatrix();
+					this->lFoot->draw();
+				glPopMatrix();
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
 
 }
