@@ -149,9 +149,9 @@ void onMouseDragCB(int x, int y){
 				break;
 			case EDIT_STATE:
 				if (x > prevX) {
-					rotateAngle = 30.0;
+					rotateAngle = 10.0;
 				} else {
-					rotateAngle = -30.0;
+					rotateAngle = -10.0;
 				}
 				
 				switch (axisState) {

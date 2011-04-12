@@ -191,9 +191,11 @@ void BodyPart::draw(){
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	
+	glTranslatef(this->location.x, this->location.y, this->location.z);
 	glRotatef(this->rotations.x, 1.0, 0.0, 0.0);
 	glRotatef(this->rotations.y, 0.0, 1.0, 0.0);
 	glRotatef(this->rotations.z, 0.0, 0.0, 1.0);
+	glTranslatef(-this->location.x, -this->location.y, -this->location.z);
 	
 	glBegin(GL_QUADS);
 		//Draw top and bottom faces
