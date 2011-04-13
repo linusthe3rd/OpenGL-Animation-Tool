@@ -3,7 +3,9 @@
 /**
  * Create a new body part with a position and volume
  */
-BodyPart::BodyPart(float x, float y, float z, float width, float height, float depth)  {
+BodyPart::BodyPart(string name, float x, float y, float z, float width, float height, float depth)  {
+	this->name = name;
+	
 	this->location = Point3f(x, y, z);
 	this->vol = Volume(width, height, depth);
 	this->rotations = Rotation_t();
@@ -24,8 +26,6 @@ BodyPart::BodyPart(float x, float y, float z, float width, float height, float d
 	this->specular[3] = 1.0;
 	
 	this->shine = 100.0f;
-	
-	this->name = "";
 }
 
 /**
@@ -132,6 +132,7 @@ GLfloat BodyPart::getShininess(){
  *	filename - the path to the image file that will be used as the texture.
  */
 void BodyPart::setTextureImg(char *filename){
+	this->textureImg.fName = filename;
 	this->textureImg.data = stbi_load(filename, &this->textureImg.width, &this->textureImg.height, &this->textureImg.n, 0);
 	
 	glGenTextures(1, &texture[0]);
@@ -242,7 +243,7 @@ string BodyPart::toString(){
 	ostringstream oss;
 	
 	oss << this->name << "\r\n";
-	oss << "Texture Name\r\n";
+	oss << this->textureImg.fName << "\r\n";
 	oss << this->rotations.x << " " << this->rotations.y << " " << this->rotations.z << "\r\n";
 	oss << this->ambient[0] << " " << this->ambient[1] << " " << this->ambient[2] << " " << this->ambient[3] << "\r\n";
 	oss << this->diffuse[0] << " " << this->diffuse[1] << " " << this->diffuse[2] << " " << this->diffuse[3] << "\r\n";

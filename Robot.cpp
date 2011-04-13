@@ -21,11 +21,11 @@
  * that the robot will have.s
  */
 Robot::Robot(){
-	this->head = new BodyPart(0.0f, 2.5f, 0.0f, 0.5f, 0.5f, 0.5f);
+	this->head = new BodyPart("head", 0.0f, 2.5f, 0.0f, 0.5f, 0.5f, 0.5f);
 	this->head->setTextureImg("Baboon.bmp");
 	
-	this->upperTorso = new BodyPart(0.0f, 2.0f, 0.0f, 1.0f, 0.5f, 1.0f);
-	this->lowerTorso = new BodyPart(0.0f, 1.5f, 0.0f, 1.0f, 0.5f, 1.0f);
+	this->upperTorso = new BodyPart("upperTorso", 0.0f, 2.0f, 0.0f, 1.0f, 0.5f, 1.0f);
+	this->lowerTorso = new BodyPart("lowerTorso", 0.0f, 1.5f, 0.0f, 1.0f, 0.5f, 1.0f);
 	
 	this->upperTorso->setTextureImg("color_rows.bmp");
 	this->upperTorso->setAmbientLightColor(1.0f, 0.0f, 0.0f, 1.0f);
@@ -37,9 +37,9 @@ Robot::Robot(){
 	this->lowerTorso->setDiffuseLightColor(1.0f, 0.0f, 0.0f, 1.0f);
 	this->lowerTorso->setSpecularLightColor(1.0f, 0.0f, 0.0f, 1.0f);
 	
-	this->rUpperArm = new BodyPart(-0.55f, 1.7f, -0.1f, 0.15f, 0.3f, 0.1f);
-	this->rLowerArm = new BodyPart(-0.55f, 1.4f, -0.1f, 0.15f, 0.4f, 0.1f);
-	this->rHand = new BodyPart(-0.55f, 1.1f, -0.1f, 0.2f, 0.2f, 0.2f);
+	this->rUpperArm = new BodyPart("rUpperArm", -0.55f, 1.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	this->rLowerArm = new BodyPart("rLowerArm", -0.55f, 1.4f, -0.1f, 0.15f, 0.4f, 0.1f);
+	this->rHand = new BodyPart("rHand", -0.55f, 1.1f, -0.1f, 0.2f, 0.2f, 0.2f);
 	
 	this->rUpperArm->setTextureImg("color_rows.bmp");
 	this->rUpperArm->setAmbientLightColor(0.0f, 1.0f, 0.0f, 1.0f);
@@ -56,9 +56,9 @@ Robot::Robot(){
 	this->rHand->setDiffuseLightColor(0.0f, 1.0f, 0.0f, 1.0f);
 	this->rHand->setSpecularLightColor(0.0f, 1.0f, 0.0f, 1.0f);
 	
-	this->lUpperArm = new BodyPart(0.55f, 1.7f, -0.1f, 0.15f, 0.3f, 0.1f);
-	this->lLowerArm = new BodyPart(0.55f, 1.4f, -0.1f, 0.15f, 0.4f, 0.1f);
-	this->lHand = new BodyPart(0.55f, 1.1f, -0.1f, 0.2f, 0.2f, 0.2f);
+	this->lUpperArm = new BodyPart("lUpperArm", 0.55f, 1.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	this->lLowerArm = new BodyPart("lLowerArm", 0.55f, 1.4f, -0.1f, 0.15f, 0.4f, 0.1f);
+	this->lHand = new BodyPart("lHand", 0.55f, 1.1f, -0.1f, 0.2f, 0.2f, 0.2f);
 	
 	this->lUpperArm->setTextureImg("color_rows.bmp");
 	this->lUpperArm->setAmbientLightColor(0.0f, 1.0f, 0.0f, 1.0f);
@@ -75,9 +75,9 @@ Robot::Robot(){
 	this->lHand->setDiffuseLightColor(0.0f, 1.0f, 0.0f, 1.0f);
 	this->lHand->setSpecularLightColor(0.0f, 1.0f, 0.0f, 1.0f);
 	
-	this->rUpperLeg = new BodyPart(-0.4f, 1.0f, -0.1f, 0.15f, 0.3f, 0.1f);
-	this->rLowerLeg = new BodyPart(-0.4f, 0.7f, -0.1f, 0.15f, 0.3f, 0.1f);
-	this->rFoot = new BodyPart(-0.4f, 0.4f, 0.0f, 0.2f, 0.1f, 0.3f);
+	this->rUpperLeg = new BodyPart("rUpperLeg", -0.4f, 1.0f, -0.1f, 0.15f, 0.3f, 0.1f);
+	this->rLowerLeg = new BodyPart("rLowerLeg", -0.4f, 0.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	this->rFoot = new BodyPart("rFoot", -0.4f, 0.4f, 0.0f, 0.2f, 0.1f, 0.3f);
 	
 	this->rUpperLeg->setTextureImg("color_rows.bmp");
 	this->rUpperLeg->setAmbientLightColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -94,9 +94,9 @@ Robot::Robot(){
 	this->rFoot->setDiffuseLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 	this->rFoot->setSpecularLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 	
-	this->lUpperLeg = new BodyPart(0.4f, 1.0f, -0.1f, 0.15f, 0.3f, 0.1f);
-	this->lLowerLeg = new BodyPart(0.4f, 0.7f, -0.1f, 0.15f, 0.3f, 0.1f);
-	this->lFoot = new BodyPart(0.4f, 0.4f, 0.0f, 0.2f, 0.1f, 0.3f);
+	this->lUpperLeg = new BodyPart("lUpperLeg", 0.4f, 1.0f, -0.1f, 0.15f, 0.3f, 0.1f);
+	this->lLowerLeg = new BodyPart("lLowerLeg", 0.4f, 0.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	this->lFoot = new BodyPart("lFoot", 0.4f, 0.4f, 0.0f, 0.2f, 0.1f, 0.3f);
 	
 	this->lUpperLeg->setTextureImg("color_rows.bmp");
 	this->lUpperLeg->setAmbientLightColor(0.0f, 0.0f, 1.0f, 1.0f);

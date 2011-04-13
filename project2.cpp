@@ -19,6 +19,10 @@
 #endif
 
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <cerrno>
+
 #include "Camera.h"
 #include "Robot.h"
 
@@ -197,8 +201,25 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 
 }
 
+void saveCurrentPose(){
+	string fName = "ro.bit";
+	ofstream fout(fName.c_str());
+	
+	if (fout) {
+		fout << robot->toString();
+	} else {
+		cout << "Unable to write " << fName << ":" << strerror(errno);
+	}
+
+}
+
 void onContextMenuCB(int option){
-	robot->setEditableLimb(option);
+	if (option == SAVE_BTN) {
+		saveCurrentPose();
+	} else {
+		robot->setEditableLimb(option);
+	}
+	
 }
 
 /*===================
@@ -260,7 +281,6 @@ void init(){
 	isDragging = false;
 	
 	robot = new Robot();
-	cout << robot->toString();
 }
 
 

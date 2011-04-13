@@ -28,6 +28,7 @@ using namespace std;
 #include "stb_image.h"
 
 struct Image_t {
+	string fName;
 	int width, height, n;
 	unsigned char *data;
 };
@@ -55,7 +56,7 @@ protected:
 	
 	
 public:
-	BodyPart(float x, float y, float z, float width=1.0f, float height=1.0f, float depth=1.0f);
+	BodyPart(string name, float x, float y, float z, float width=1.0f, float height=1.0f, float depth=1.0f);
 	
 	void setLocation(float x, float y, float z);
 	Point3f getLocation();
