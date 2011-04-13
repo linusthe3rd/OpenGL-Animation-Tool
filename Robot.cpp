@@ -225,5 +225,32 @@ void Robot::draw(){
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
+}
 
+string Robot::toString(){
+	string out = "";
+	
+	out += this->upperTorso->toString();
+	
+	out += this->head->toString();
+	
+	out += this->rUpperArm->toString();
+	out += this->rLowerArm->toString();
+	out += this->rHand->toString();
+	
+	out += this->lUpperArm->toString();
+	out += this->lLowerArm->toString();
+	out += this->lHand->toString();
+	
+	out += this->lowerTorso->toString();
+	
+	out += this->rUpperLeg->toString();
+	out += this->rLowerLeg->toString();
+	out += this->rFoot->toString();
+	
+	out += this->lUpperLeg->toString();
+	out += this->lLowerLeg->toString();
+	out += this->lFoot->toString();
+	
+	return out;
 }

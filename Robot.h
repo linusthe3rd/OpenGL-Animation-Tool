@@ -7,6 +7,9 @@
  */
 
 #include "BodyPart.h"
+#include <string>
+
+using namespace std;
 
 class Robot {
 private:
@@ -24,4 +27,5 @@ public:
 	void rotateLimb(float angle, float x, float y, float z);
 	void setEditableLimb(int limb);
 	void draw();
+	string toString();
 };

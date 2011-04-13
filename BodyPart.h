@@ -18,7 +18,8 @@
 	#include <GL/glu.h>
 #endif
 
-#include <vector>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -50,6 +51,7 @@ protected:
 	Image_t textureImg;
 	GLuint texture[1];
 	Rotation_t rotations;
+	string name;
 	
 	
 public:
@@ -77,8 +79,10 @@ public:
 	
 	void rotate(float angle, float x, float y, float z);
 	Rotation_t getRotation();
-	
-	bool contains(int x, int y);	
+		
 	void draw();
+	
+	void setLimbName(string _name);
+	string toString();
 };
 #endif

@@ -37,6 +37,9 @@ Instructions
 			3. rotate the limb about the z-axis
 		- Drag the mouse left and right to change the rotation angle of the limb
 	
+	Save Current Pose
+		- Right click the mouse and choose "Save Pose"
+	
 		
 Program Execution Instructions
 ==============================
@@ -58,6 +61,7 @@ Completed Requirements
 	- Each body part has its own lighting material property
 	- Each body part has its own texture 
 	- Use mouse to pan, zoom, and rotate the camera
+	- manipulate the body pose by using the mouse
 
 Incomplete Requirements
 ======================

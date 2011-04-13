@@ -35,6 +35,7 @@
 #define Z_AXIS 3
 
 #define ZERO -1
+#define SAVE_BTN 100
 #define HEAD 0
 #define UPPER_TORSO 1
 #define LOWER_TORSO 2
@@ -222,6 +223,7 @@ void init(){
 	
 	glutCreateMenu(onContextMenuCB);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	glutAddMenuEntry("Save Pose", SAVE_BTN);
 	glutAddMenuEntry("Head", HEAD);
 	glutAddMenuEntry("", ZERO);
 	glutAddMenuEntry("Upper Torso", UPPER_TORSO);
@@ -258,6 +260,7 @@ void init(){
 	isDragging = false;
 	
 	robot = new Robot();
+	cout << robot->toString();
 }
 
 

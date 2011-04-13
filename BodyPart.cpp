@@ -24,6 +24,8 @@ BodyPart::BodyPart(float x, float y, float z, float width, float height, float d
 	this->specular[3] = 1.0;
 	
 	this->shine = 100.0f;
+	
+	this->name = "";
 }
 
 /**
@@ -161,13 +163,6 @@ Rotation_t BodyPart::getRotation(){
 }
 
 /**
- * Determine if a given mouse x,y coordinate is within the bounds of the body part.
- */
-bool BodyPart::contains(int x, int y){
-	return false;
-}
-
-/**
  * Draw the body part in the window.
  */
 void BodyPart::draw(){
@@ -237,4 +232,23 @@ void BodyPart::draw(){
 		glTexCoord2f(0.0f, 0.0f); glVertex3f( maxX, maxY, minZ);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f( maxX, minY, minZ);
 	glEnd();
+}
+
+void BodyPart::setLimbName(string _name){
+	this->name = _name;
+}
+
+string BodyPart::toString(){
+	ostringstream oss;
+	
+	oss << this->name << "\r\n";
+	oss << "Texture Name\r\n";
+	oss << this->rotations.x << " " << this->rotations.y << " " << this->rotations.z << "\r\n";
+	oss << this->ambient[0] << " " << this->ambient[1] << " " << this->ambient[2] << " " << this->ambient[3] << "\r\n";
+	oss << this->diffuse[0] << " " << this->diffuse[1] << " " << this->diffuse[2] << " " << this->diffuse[3] << "\r\n";
+	oss << this->specular[0] << " " << this->specular[1] << " " << this->specular[2] << " " << this->specular[3] << "\r\n";
+	oss << this->shine << "\r\n";
+	oss << "\r\n";
+	
+	return oss.str();
 }
