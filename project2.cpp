@@ -61,6 +61,8 @@ Camera cam;
 int cameraState, axisState;
 bool isDragging;
 int prevX, prevY;
+char* loadFileName;
+char* saveFileName;
 
 Robot *robot;
 
@@ -202,13 +204,13 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 }
 
 void saveCurrentPose(){
-	string fName = "ro.bit";
-	ofstream fout(fName.c_str());
+	//string fName = "ro.bit";
+	ofstream fout(saveFileName);
 	
 	if (fout) {
 		fout << robot->toString();
 	} else {
-		cout << "Unable to write " << fName << ":" << strerror(errno);
+		cout << "Unable to write " << saveFileName << ":" << strerror(errno);
 	}
 
 }
@@ -285,6 +287,13 @@ void init(){
 
 
 int main (int argc, char * argv[]) {
+	char* arg = argv[1];
+	if (strcmp(arg, "-s") == 0) {
+		saveFileName = argv[2];
+	} else if (strcmp(arg, "-l") == 0) {
+		loadFileName = argv[2];
+	}
+	
     glutInit(&argc, argv);
 	
 	init();

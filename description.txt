@@ -62,6 +62,7 @@ Completed Requirements
 	- Each body part has its own texture 
 	- Use mouse to pan, zoom, and rotate the camera
 	- manipulate the body pose by using the mouse
+	- saving the current pose of a robot to a file
 
 Incomplete Requirements
 ======================
