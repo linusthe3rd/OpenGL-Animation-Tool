@@ -204,15 +204,24 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 }
 
 void saveCurrentPose(){
-	//string fName = "ro.bit";
-	ofstream fout(saveFileName);
-	
-	if (fout) {
-		fout << robot->toString();
-	} else {
-		cout << "Unable to write " << saveFileName << ":" << strerror(errno);
+	char* fName = NULL;
+	if (saveFileName != NULL ) {
+		fName = saveFileName;
+	} else if (loadFileName != NULL){
+		fName = loadFileName;
 	}
-
+	
+	if (fName != NULL){
+		remove(fName);
+		ofstream fout(fName);
+		
+		if (fout) {
+			fout << robot->toString();
+			fout.close();
+		} else {
+			cout << "Unable to write " << saveFileName << ":" << strerror(errno);
+		}
+	}
 }
 
 void onContextMenuCB(int option){
@@ -246,7 +255,9 @@ void init(){
 	
 	glutCreateMenu(onContextMenuCB);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	glutAddMenuEntry("Save Pose", SAVE_BTN);
+	if (saveFileName != NULL || loadFileName != NULL) {
+		glutAddMenuEntry("Save Pose", SAVE_BTN);
+	}
 	glutAddMenuEntry("Head", HEAD);
 	glutAddMenuEntry("", ZERO);
 	glutAddMenuEntry("Upper Torso", UPPER_TORSO);
@@ -283,16 +294,23 @@ void init(){
 	isDragging = false;
 	
 	robot = new Robot();
+	
+	if (loadFileName != NULL) {
+		robot->loadPose(loadFileName);
+	}
 }
 
 
 int main (int argc, char * argv[]) {
-	char* arg = argv[1];
-	if (strcmp(arg, "-s") == 0) {
-		saveFileName = argv[2];
-	} else if (strcmp(arg, "-l") == 0) {
-		loadFileName = argv[2];
+	if (argc > 1) {
+		char* arg = argv[1];
+		if (strcmp(arg, "-s") == 0) {
+			saveFileName = argv[2];
+		} else if (strcmp(arg, "-l") == 0) {
+			loadFileName = argv[2];
+		}
 	}
+	
 	
     glutInit(&argc, argv);
 	

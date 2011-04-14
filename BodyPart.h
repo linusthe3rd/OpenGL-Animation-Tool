@@ -76,9 +76,10 @@ public:
 	void setShininess(float value);
 	GLfloat getShininess();
 	
-	void setTextureImg(char *filename);
+	void setTextureImg(const char *filename);
 	
 	void rotate(float angle, float x, float y, float z);
+	void setRotationAngles(float xAngle, float yAngle, float zAngle);
 	Rotation_t getRotation();
 		
 	void draw();

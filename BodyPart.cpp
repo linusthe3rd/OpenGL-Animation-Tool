@@ -131,7 +131,7 @@ GLfloat BodyPart::getShininess(){
  * Params
  *	filename - the path to the image file that will be used as the texture.
  */
-void BodyPart::setTextureImg(char *filename){
+void BodyPart::setTextureImg(const char *filename){
 	this->textureImg.fName = filename;
 	this->textureImg.data = stbi_load(filename, &this->textureImg.width, &this->textureImg.height, &this->textureImg.n, 0);
 	
@@ -157,6 +157,12 @@ void BodyPart::rotate(float angle, float x, float y, float z){
 	} else if (z == 1.0) {
 		this->rotations.z += angle;
 	}
+}
+
+void BodyPart::setRotationAngles(float xAngle, float yAngle, float zAngle){
+	this->rotations.x = xAngle;
+	this->rotations.y = yAngle;
+	this->rotations.z = zAngle;
 }
 
 Rotation_t BodyPart::getRotation(){
@@ -242,14 +248,14 @@ void BodyPart::setLimbName(string _name){
 string BodyPart::toString(){
 	ostringstream oss;
 	
-	oss << this->name << "\r\n";
-	oss << this->textureImg.fName << "\r\n";
-	oss << this->rotations.x << " " << this->rotations.y << " " << this->rotations.z << "\r\n";
-	oss << this->ambient[0] << " " << this->ambient[1] << " " << this->ambient[2] << " " << this->ambient[3] << "\r\n";
-	oss << this->diffuse[0] << " " << this->diffuse[1] << " " << this->diffuse[2] << " " << this->diffuse[3] << "\r\n";
-	oss << this->specular[0] << " " << this->specular[1] << " " << this->specular[2] << " " << this->specular[3] << "\r\n";
-	oss << this->shine << "\r\n";
-	oss << "\r\n";
+	oss << this->name << "\n";
+	oss << this->textureImg.fName << "\n";
+	oss << this->rotations.x << " " << this->rotations.y << " " << this->rotations.z << "\n";
+	oss << this->ambient[0] << " " << this->ambient[1] << " " << this->ambient[2] << " " << this->ambient[3] << "\n";
+	oss << this->diffuse[0] << " " << this->diffuse[1] << " " << this->diffuse[2] << " " << this->diffuse[3] << "\n";
+	oss << this->specular[0] << " " << this->specular[1] << " " << this->specular[2] << " " << this->specular[3] << "\n";
+	oss << this->shine << "\n";
+	oss << "\n";
 	
 	return oss.str();
 }

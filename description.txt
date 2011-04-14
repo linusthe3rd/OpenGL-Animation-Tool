@@ -52,6 +52,10 @@ Program Execution Instructions
 		make
 		./project2
 		
+	Arguments (optional):
+		-s	A path to a file that will be created to store the current pose of the robot.
+		-l	A path to a file that will be used to load a previously saved robot file
+		
 
 Completed Requirements
 ======================
@@ -63,10 +67,31 @@ Completed Requirements
 	- Use mouse to pan, zoom, and rotate the camera
 	- manipulate the body pose by using the mouse
 	- saving the current pose of a robot to a file
+	- loading a robot's pose into the program
+	
+Robot Pose File
+===============
 
-Incomplete Requirements
-======================
+The format of the pose file is the following:
 
-	- Being able to pose change the robot's body pose using the mouse
+<String, name of the limb>\n
+<String, path to the texture file of the limb>\n
+<float, angle of rotation about the x-axis> <float, angle of rotation about the y-axis> <float, angle of rotation about the z-axis>\n
+<float, R value for ambient lighting> <float, G value for ambient lighting> <float, B value for ambient lighting> <float, A value for ambient lighting>\n
+<float, R value for diffuse lighting> <float, G value for diffuse lighting> <float, B value for diffuse lighting> <float, A value for diffuse lighting>\n
+<float, R value for specular lighting> <float, G value for specular lighting> <float, B value for specular lighting> <float, A value for specular lighting>\n
+<float, shininess value>\n
+\n
+
+Example:
+
+head
+Baboon.bmp
+80 30 0
+0.9 0.9 0.9 1
+0.9 0.9 0.9 1
+0.9 0.9 0.9 1
+100
+
 
 	

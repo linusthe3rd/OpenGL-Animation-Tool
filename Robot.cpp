@@ -21,11 +21,16 @@
  * that the robot will have.s
  */
 Robot::Robot(){
+	this->curLimb = NULL;
+	
 	this->head = new BodyPart("head", 0.0f, 2.5f, 0.0f, 0.5f, 0.5f, 0.5f);
 	this->head->setTextureImg("Baboon.bmp");
+	limbMap["head"] = this->head;
 	
 	this->upperTorso = new BodyPart("upperTorso", 0.0f, 2.0f, 0.0f, 1.0f, 0.5f, 1.0f);
+	limbMap["upperTorso"] = this->upperTorso;
 	this->lowerTorso = new BodyPart("lowerTorso", 0.0f, 1.5f, 0.0f, 1.0f, 0.5f, 1.0f);
+	limbMap["lowerTorso"] = this->lowerTorso;
 	
 	this->upperTorso->setTextureImg("color_rows.bmp");
 	this->upperTorso->setAmbientLightColor(1.0f, 0.0f, 0.0f, 1.0f);
@@ -38,8 +43,11 @@ Robot::Robot(){
 	this->lowerTorso->setSpecularLightColor(1.0f, 0.0f, 0.0f, 1.0f);
 	
 	this->rUpperArm = new BodyPart("rUpperArm", -0.55f, 1.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	limbMap["rUpperArm"] = this->rUpperArm;
 	this->rLowerArm = new BodyPart("rLowerArm", -0.55f, 1.4f, -0.1f, 0.15f, 0.4f, 0.1f);
+	limbMap["rLowerArm"] = this->rLowerArm;
 	this->rHand = new BodyPart("rHand", -0.55f, 1.1f, -0.1f, 0.2f, 0.2f, 0.2f);
+	limbMap["rHand"] = this->rHand;
 	
 	this->rUpperArm->setTextureImg("color_rows.bmp");
 	this->rUpperArm->setAmbientLightColor(0.0f, 1.0f, 0.0f, 1.0f);
@@ -57,8 +65,11 @@ Robot::Robot(){
 	this->rHand->setSpecularLightColor(0.0f, 1.0f, 0.0f, 1.0f);
 	
 	this->lUpperArm = new BodyPart("lUpperArm", 0.55f, 1.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	limbMap["lUpperArm"] = this->lUpperArm;
 	this->lLowerArm = new BodyPart("lLowerArm", 0.55f, 1.4f, -0.1f, 0.15f, 0.4f, 0.1f);
+	limbMap["lLowerArm"] = this->lLowerArm;
 	this->lHand = new BodyPart("lHand", 0.55f, 1.1f, -0.1f, 0.2f, 0.2f, 0.2f);
+	limbMap["lHand"] = this->lHand;
 	
 	this->lUpperArm->setTextureImg("color_rows.bmp");
 	this->lUpperArm->setAmbientLightColor(0.0f, 1.0f, 0.0f, 1.0f);
@@ -76,8 +87,11 @@ Robot::Robot(){
 	this->lHand->setSpecularLightColor(0.0f, 1.0f, 0.0f, 1.0f);
 	
 	this->rUpperLeg = new BodyPart("rUpperLeg", -0.4f, 1.0f, -0.1f, 0.15f, 0.3f, 0.1f);
+	limbMap["rUpperLeg"] = this->rUpperLeg;
 	this->rLowerLeg = new BodyPart("rLowerLeg", -0.4f, 0.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	limbMap["rLowerLeg"] = this->rLowerLeg;
 	this->rFoot = new BodyPart("rFoot", -0.4f, 0.4f, 0.0f, 0.2f, 0.1f, 0.3f);
+	limbMap["rFoot"] = this->rFoot;
 	
 	this->rUpperLeg->setTextureImg("color_rows.bmp");
 	this->rUpperLeg->setAmbientLightColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -95,8 +109,11 @@ Robot::Robot(){
 	this->rFoot->setSpecularLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 	
 	this->lUpperLeg = new BodyPart("lUpperLeg", 0.4f, 1.0f, -0.1f, 0.15f, 0.3f, 0.1f);
+	limbMap["lUpperLeg"] = this->lUpperLeg;
 	this->lLowerLeg = new BodyPart("lLowerLeg", 0.4f, 0.7f, -0.1f, 0.15f, 0.3f, 0.1f);
+	limbMap["lLowerLeg"] = this->lLowerLeg;
 	this->lFoot = new BodyPart("lFoot", 0.4f, 0.4f, 0.0f, 0.2f, 0.1f, 0.3f);
+	limbMap["lFoot"] = this->lFoot;
 	
 	this->lUpperLeg->setTextureImg("color_rows.bmp");
 	this->lUpperLeg->setAmbientLightColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -114,8 +131,75 @@ Robot::Robot(){
 	this->lFoot->setSpecularLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
+void Robot::loadPose(char* fName){
+	ifstream fs(fName);
+	
+	string line;
+	if (fs.is_open()){
+		int blockCount = 1;
+		BodyPart *limb;
+		
+		while (fs.good()) {
+			getline(fs, line);
+			
+			if (line == ""){
+				blockCount = 1;
+				continue;
+			} else if (blockCount == 1 && this->limbMap.count(line) > 0){
+				limb = limbMap[line];
+			} else if (blockCount == 2){
+				limb->setTextureImg(line.c_str());
+			} else if (blockCount == 3){
+				vector<string> angles = splitStringBySpace(line);
+				float xAngle = convertToFloat(angles[0]);
+				float yAngle = convertToFloat(angles[1]);
+				float zAngle = convertToFloat(angles[2]);
+				limb->setRotationAngles(xAngle, yAngle, zAngle);
+			} else if (blockCount == 4){
+				vector<string> ambientVals = splitStringBySpace(line);
+				float aRed = convertToFloat(ambientVals[0]);
+				float aGreen = convertToFloat(ambientVals[1]);
+				float aBlue = convertToFloat(ambientVals[2]);
+				float aAlpha = convertToFloat(ambientVals[3]);
+				limb->setAmbientLightColor(aRed, aGreen, aBlue, aAlpha);
+			} else if (blockCount == 5){
+				vector<string> diffuseVals = splitStringBySpace(line);
+				float dRed = convertToFloat(diffuseVals[0]);
+				float dGreen = convertToFloat(diffuseVals[1]);
+				float dBlue = convertToFloat(diffuseVals[2]);
+				float dAlpha = convertToFloat(diffuseVals[3]);
+				limb->setDiffuseLightColor(dRed, dGreen, dBlue, dAlpha);
+			} else if (blockCount == 6){
+				vector<string> specularVals = splitStringBySpace(line);
+				float sRed = convertToFloat(specularVals[0]);
+				float sGreen = convertToFloat(specularVals[1]);
+				float sBlue = convertToFloat(specularVals[2]);
+				float sAlpha = convertToFloat(specularVals[3]);
+				limb->setSpecularLightColor(sRed, sGreen, sBlue, sAlpha);
+			} else if (blockCount == 7){
+				limb->setShininess(convertToFloat(line));
+			}
+			
+			blockCount++;
+		}
+	}
+}
+
+vector<string> Robot::splitStringBySpace(string str){
+    string buf; // Have a buffer string
+    stringstream ss(str); // Insert the string into a stream
+	
+    vector<string> tokens; // Create vector to hold our words
+	
+    while (ss >> buf)
+        tokens.push_back(buf);
+	
+	return tokens;
+}
+
 void Robot::rotateLimb(float angle, float x, float y, float z){
-	this->curLimb->rotate(angle, x, y, z);
+	if (this->curLimb != NULL)
+		this->curLimb->rotate(angle, x, y, z);
 }
 
 void Robot::setEditableLimb(int limb){
