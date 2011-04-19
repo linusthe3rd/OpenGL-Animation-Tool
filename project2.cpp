@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <cstring>
 #include <cerrno>
 
 #include "Camera.h"
@@ -219,7 +219,7 @@ void saveCurrentPose(){
 			fout << robot->toString();
 			fout.close();
 		} else {
-			cout << "Unable to write " << saveFileName << ":" << strerror(errno);
+			cout << "Unable to write " << saveFileName << endl;
 		}
 	}
 }

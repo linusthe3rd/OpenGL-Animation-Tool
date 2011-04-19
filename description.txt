@@ -56,6 +56,9 @@ Program Execution Instructions
 		-s	A path to a file that will be created to store the current pose of the robot.
 		-l	A path to a file that will be used to load a previously saved robot file
 		
+	Note:
+		I have included a pose file called "ro.bit"
+		
 
 Completed Requirements
 ======================

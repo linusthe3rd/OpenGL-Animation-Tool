@@ -25,6 +25,7 @@ Robot::Robot(){
 	
 	this->head = new BodyPart("head", 0.0f, 2.5f, 0.0f, 0.5f, 0.5f, 0.5f);
 	this->head->setTextureImg("Baboon.bmp");
+	this->head->shouldFlip(true);
 	limbMap["head"] = this->head;
 	
 	this->upperTorso = new BodyPart("upperTorso", 0.0f, 2.0f, 0.0f, 1.0f, 0.5f, 1.0f);

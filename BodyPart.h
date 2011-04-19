@@ -53,6 +53,7 @@ protected:
 	GLuint texture[1];
 	Rotation_t rotations;
 	string name;
+	bool shouldFlipY;
 	
 	
 public:
@@ -82,6 +83,8 @@ public:
 	void setRotationAngles(float xAngle, float yAngle, float zAngle);
 	Rotation_t getRotation();
 		
+	void shouldFlip(bool flip);
+	
 	void draw();
 	
 	void setLimbName(string _name);

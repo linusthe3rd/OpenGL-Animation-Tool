@@ -26,6 +26,8 @@ BodyPart::BodyPart(string name, float x, float y, float z, float width, float he
 	this->specular[3] = 1.0;
 	
 	this->shine = 100.0f;
+	
+	this->shouldFlipY = false;
 }
 
 /**
@@ -169,6 +171,10 @@ Rotation_t BodyPart::getRotation(){
 	return this->rotations;
 }
 
+void BodyPart::shouldFlip(bool flip){
+	this->shouldFlipY = flip;
+}
+
 /**
  * Draw the body part in the window.
  */
@@ -193,11 +199,23 @@ void BodyPart::draw(){
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	
-	glTranslatef(this->location.x, this->location.y, this->location.z);
+	if (this->shouldFlipY) {
+		glTranslatef(this->location.x, minY, this->location.z);	
+	} else {
+		glTranslatef(this->location.x, this->location.y, this->location.z);
+	}
+
+	
 	glRotatef(this->rotations.x, 1.0, 0.0, 0.0);
 	glRotatef(this->rotations.y, 0.0, 1.0, 0.0);
 	glRotatef(this->rotations.z, 0.0, 0.0, 1.0);
-	glTranslatef(-this->location.x, -this->location.y, -this->location.z);
+	
+	if (this->shouldFlipY) {
+		glTranslatef(-this->location.x, -minY, -this->location.z);
+	} else {
+		glTranslatef(-this->location.x, -this->location.y, -this->location.z);
+	}
+	
 	
 	glBegin(GL_QUADS);
 		//Draw top and bottom faces
