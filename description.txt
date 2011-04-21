@@ -1,7 +1,7 @@
-CS 4204 - Project 2
+CS 4204 - Project 3
 
 Author: John Ryding
-Date: 4/17/11
+Date: 4/25/11
 
 Description
 ===========
@@ -46,11 +46,11 @@ Program Execution Instructions
 
 	Mac:
 		make -f Makefile_osx
-		./project2
+		./project3
 	
 	Linux:
 		make
-		./project2
+		./project3
 		
 	Arguments (optional):
 		-s	A path to a file that will be created to store the current pose of the robot.
@@ -63,14 +63,10 @@ Program Execution Instructions
 Completed Requirements
 ======================
 
-	- Draw a floor
-	- Create a 3D robot
-	- Each body part has its own lighting material property
-	- Each body part has its own texture 
-	- Use mouse to pan, zoom, and rotate the camera
-	- manipulate the body pose by using the mouse
+	- Create a 3D robot from project 2
 	- saving the current pose of a robot to a file
 	- loading a robot's pose into the program
+	
 	
 Robot Pose File
 ===============
