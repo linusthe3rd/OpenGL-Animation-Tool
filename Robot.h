@@ -5,6 +5,8 @@
  *  A class that will draw a robot in a window.
  *
  */
+#ifndef _ROBOT_H_
+#define _ROBOT_H_
 
 #include "BodyPart.h"
 #include "Util.h"
@@ -39,3 +41,4 @@ public:
 	void draw();
 	string toString();
 };
+#endif
