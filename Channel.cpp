@@ -12,7 +12,8 @@
 Channel::Channel() : keyFrameArr(){}
 
 float Channel::Evaluate(float time){
-	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, cmpKeyframeTimes);
+	Keyframe_Time_functor f;
+	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, f);
 	Keyframe k1 = *ubIter;
 	Keyframe k0 = *(--ubIter);
 	
@@ -23,9 +24,11 @@ float Channel::Evaluate(float time){
 	return k0.D + u*( k0.C + u*( k0.B + u*k0.A) );
 }
 
-void Channel::insertKeyFrame(Keyframe frame){
-	keyFrameArr.push_back(frame);
-	sort(keyFrameArr.begin(), keyFrameArr.end(), cmpKeyframes);
+void Channel::insertKeyFrame(Keyframe *frame){
+	keyFrameArr.push_back(*frame);
+	
+	Keyframe_functor f;
+	sort(keyFrameArr.begin(), keyFrameArr.end(), f);
 	this->Precompute();
 }
 
@@ -34,12 +37,16 @@ void Channel::Precompute(){
 	this->computeConstants();
 }
 
+float Channel::getMaxTime(){
+	return this->keyFrameArr.end()->Time;
+}
+
 void Channel::computeTangents(){
 	for (int i = 0; i < keyFrameArr.size(); i++) {
 		if (i == 0) {
 			keyFrameArr[i].TangentIn = 0;
 			
-			if (strcmp(&(keyFrameArr[i].RuleOut), LINEAR_STR) == 0) {
+			if (keyFrameArr[i].RuleOut == LINEAR_STR) {
 				keyFrameArr[i].TangentOut = (keyFrameArr[i+1].Value - keyFrameArr[i].Value) / ( keyFrameArr[i+1].Time - keyFrameArr[i].Time );
 			} else {
 				keyFrameArr[i].TangentOut = 0;
@@ -47,25 +54,25 @@ void Channel::computeTangents(){
 		} else if (i == keyFrameArr.size()-1) {
 			keyFrameArr[i].TangentOut = 0;
 			
-			if (strcmp(&(keyFrameArr[i].RuleIn), LINEAR_STR) == 0) {
+			if (keyFrameArr[i].RuleIn == LINEAR_STR) {
 				keyFrameArr[i].TangentIn = (keyFrameArr[i].Value - keyFrameArr[i-1].Value) / ( keyFrameArr[i].Time - keyFrameArr[i-1].Time );
 			} else {
 				keyFrameArr[i].TangentIn = 0;
 			}
 		} else {
-			if (strcmp(&(keyFrameArr[i].RuleIn), FLAT_STR) == 0) {
+			if (keyFrameArr[i].RuleIn == FLAT_STR) {
 				keyFrameArr[i].TangentIn = 0;
-			} else if (strcmp(&(keyFrameArr[i].RuleIn), LINEAR_STR) == 0) {
+			} else if (keyFrameArr[i].RuleIn == LINEAR_STR) {
 				keyFrameArr[i].TangentIn = (keyFrameArr[i].Value - keyFrameArr[i-1].Value) / ( keyFrameArr[i].Time - keyFrameArr[i-1].Time );
-			} else if (strcmp(&(keyFrameArr[i].RuleIn), SMOOTH_STR) == 0) {
+			} else if (keyFrameArr[i].RuleIn == SMOOTH_STR) {
 				keyFrameArr[i].TangentIn = (keyFrameArr[i+1].Value - keyFrameArr[i-1].Value) / ( keyFrameArr[i+1].Time - keyFrameArr[i-1].Time );
 			}
 			
-			if (strcmp(&(keyFrameArr[i].RuleOut), FLAT_STR) == 0) {
+			if (keyFrameArr[i].RuleOut == FLAT_STR) {
 				keyFrameArr[i].TangentOut = 0;
-			} else if (strcmp(&(keyFrameArr[i].RuleOut), LINEAR_STR) == 0) {
+			} else if (keyFrameArr[i].RuleOut == LINEAR_STR) {
 				keyFrameArr[i].TangentOut = (keyFrameArr[i+1].Value - keyFrameArr[i].Value) / ( keyFrameArr[i+1].Time - keyFrameArr[i].Time );
-			} else if (strcmp(&(keyFrameArr[i].RuleOut), SMOOTH_STR) == 0) {
+			} else if (keyFrameArr[i].RuleOut == SMOOTH_STR) {
 				keyFrameArr[i].TangentOut = (keyFrameArr[i+1].Value - keyFrameArr[i-1].Value) / ( keyFrameArr[i+1].Time - keyFrameArr[i-1].Time );
 			}
 		}

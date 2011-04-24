@@ -39,6 +39,7 @@ public:
 	void rotateLimb(float angle, float x, float y, float z);
 	void setEditableLimb(int limb);
 	void draw();
+	vector<float> getLimbRotation(int limb);
 	string toString();
 };
 #endif

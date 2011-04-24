@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <string>
 #include <math.h>
 
 using namespace std;
@@ -32,27 +33,31 @@ using namespace std;
 #define Lerp(u, t0, t1) ( (1-u)*t0 ) + u*t1
 #define InvLerp(t, t0, t1) ( t-t0 ) / (t1 - t0)
 
-float HERMITE_MATRIX[16] = {
-	2, -2, 1, 1,
-	-3, 3, -2, -1,
-	0, 0, 1, 0,
-	1, 0, 0, 0
-};
-
 struct Keyframe {
 	float Time; //The time in which the keyframe occurs
 	float Value; //The value of the frame
 	float TangentIn,TangentOut; //"flat", "linear", or "smooth"
-	char RuleIn,RuleOut; 
+	string RuleIn,RuleOut; 
 	float A,B,C,D;
 };
 
-bool cmpKeyframes(const Keyframe &a, const Keyframe &b){
-	return a.Time < b.Time;
+struct Keyframe_functor {
+	bool operator()( const Keyframe &a, const Keyframe &b ){
+		return a.Time < b.Time;
+	}
 };
 
-bool cmpKeyframeTimes(float time, const Keyframe &frame){
-	return time < frame.Time;
+struct Keyframe_Time_functor {
+	bool operator()( float time, const Keyframe &frame){
+		return time < frame.Time;
+	}
+};
+
+const float HERMITE_MATRIX[16] = {
+	2, -2, 1, 1,
+	-3, 3, -2, -1,
+	0, 0, 1, 0,
+	1, 0, 0, 0
 };
 
 
@@ -60,8 +65,9 @@ class Channel {
 public:
 	Channel();
 	float Evaluate(float time);
-	void insertKeyFrame(Keyframe frame);
+	void insertKeyFrame(Keyframe *frame);
 	void Precompute();
+	float getMaxTime();
 	
 private:
 	vector<struct Keyframe> keyFrameArr;

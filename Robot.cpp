@@ -203,6 +203,68 @@ void Robot::rotateLimb(float angle, float x, float y, float z){
 		this->curLimb->rotate(angle, x, y, z);
 }
 
+vector<float> Robot::getLimbRotation(int limb){
+	vector<float> rotations(3,0);
+	
+	Rotation_t rot;
+	
+	switch (limb) {
+		case HEAD:
+			rot = this->head->getRotation();
+			break;
+		case UPPER_TORSO:
+			rot = this->upperTorso->getRotation();
+			break;
+		case LOWER_TORSO:
+			rot = this->lowerTorso->getRotation();
+			break;
+		case UPPER_LEFT_ARM:
+			rot = this->lUpperArm->getRotation();
+			break;
+		case LOWER_LEFT_ARM:
+			rot = this->lLowerArm->getRotation();
+			break;
+		case LEFT_HAND:
+			rot = this->lHand->getRotation();
+			break;
+		case UPPER_RIGHT_ARM:
+			rot = this->rUpperArm->getRotation();
+			break;
+		case LOWER_RIGHT_ARM:
+			rot = this->rLowerArm->getRotation();
+			break;
+		case RIGHT_HAND:
+			rot = this->rHand->getRotation();
+			break;
+		case UPPER_LEFT_LEG:
+			rot = this->lUpperLeg->getRotation();
+			break;
+		case LOWER_LEFT_LEG:
+			rot = this->lLowerLeg->getRotation();
+			break;
+		case LEFT_FOOT:
+			rot = this->lFoot->getRotation();
+			break;
+		case UPPER_RIGHT_LEG:
+			rot = this->rUpperLeg->getRotation();
+			break;
+		case LOWER_RIGHT_LEG:
+			rot = this->rLowerLeg->getRotation();
+			break;
+		case RIGHT_FOOT:
+			rot = this->rFoot->getRotation();
+			break;
+		default:
+			break;
+	}
+	
+	rotations[0] = rot.x;
+	rotations[1] = rot.y;
+	rotations[2] = rot.z;
+	
+	return rotations;
+}
+
 void Robot::setEditableLimb(int limb){
 	switch (limb) {
 		case HEAD:
