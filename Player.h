@@ -35,6 +35,7 @@ private:
 	float currentTime;
 	int framerate;
 	float increment;
+	int keyframeAmt;
 	
 	void updatePose();
 };

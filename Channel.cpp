@@ -25,10 +25,10 @@ float Channel::Evaluate(float time){
 }
 
 void Channel::insertKeyFrame(Keyframe *frame){
-	keyFrameArr.push_back(*frame);
+	this->keyFrameArr.push_back(*frame);
 	
 	Keyframe_functor f;
-	sort(keyFrameArr.begin(), keyFrameArr.end(), f);
+	sort(this->keyFrameArr.begin(), this->keyFrameArr.end(), f);
 	this->Precompute();
 }
 
@@ -36,9 +36,10 @@ void Channel::Precompute(){
 	this->computeTangents();
 	this->computeConstants();
 }
-
+	
 float Channel::getMaxTime(){
-	return this->keyFrameArr.end()->Time;
+	Keyframe frame = *(--this->keyFrameArr.end());
+	return frame.Time;
 }
 
 void Channel::computeTangents(){

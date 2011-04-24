@@ -23,6 +23,7 @@
 #include <cstring>
 #include <cerrno>
 
+#include "Player.h"
 #include "Camera.h"
 #include "Robot.h"
 
@@ -56,6 +57,9 @@
 #define LOWER_RIGHT_LEG 13
 #define RIGHT_FOOT 14
 
+#define ADD_KEYFRAME 20
+
+
 
 Camera cam;
 int cameraState, axisState;
@@ -65,6 +69,7 @@ char* loadFileName;
 char* saveFileName;
 
 Robot *robot;
+Player *player;
 
 void display(void){
 	// Clear Color and Depth Buffers
@@ -126,6 +131,8 @@ void onMouseCB(int button, int state, int x, int y) {
 	} else if( button == GLUT_LEFT_BUTTON && state == GLUT_UP ) {
 		isDragging = false;
 	}
+	
+	glutPostRedisplay();
 }
 
 void onMouseDragCB(int x, int y){
@@ -182,6 +189,8 @@ void onMouseDragCB(int x, int y){
 		prevX = x;
 		prevY = y;
 	}
+	
+	glutPostRedisplay();
 }
 
 void onKeyboardCB(unsigned char key, int x, int y) {
@@ -199,8 +208,19 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 		axisState = Y_AXIS;
 	} else if (key == '3') {
 		axisState = Z_AXIS;
+	} else if (key == 13) {
+		player->play(true);
 	}
+}
 
+void onSpecialKeyboardCB(int key, int x, int y) { 
+	switch (key) {
+		case 13:
+			player->play(true);
+			break;
+		default:
+			break;
+	}
 }
 
 void saveCurrentPose(){
@@ -227,6 +247,8 @@ void saveCurrentPose(){
 void onContextMenuCB(int option){
 	if (option == SAVE_BTN) {
 		saveCurrentPose();
+	} else if (option == ADD_KEYFRAME) {
+		player->addKeyFrame();
 	} else {
 		robot->setEditableLimb(option);
 	}
@@ -252,12 +274,16 @@ void init(){
 	glutMouseFunc(onMouseCB); 
 	glutMotionFunc(onMouseDragCB);
 	glutKeyboardFunc(onKeyboardCB);
+	glutSpecialFunc(onSpecialKeyboardCB); 
 	
 	glutCreateMenu(onContextMenuCB);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	if (saveFileName != NULL || loadFileName != NULL) {
 		glutAddMenuEntry("Save Pose", SAVE_BTN);
 	}
+	
+	glutAddMenuEntry("Add key frame", ADD_KEYFRAME);
+	glutAddMenuEntry("", ZERO);
 	glutAddMenuEntry("Head", HEAD);
 	glutAddMenuEntry("", ZERO);
 	glutAddMenuEntry("Upper Torso", UPPER_TORSO);
@@ -294,6 +320,7 @@ void init(){
 	isDragging = false;
 	
 	robot = new Robot();
+	player = new Player(robot, 30);
 	
 	if (loadFileName != NULL) {
 		robot->loadPose(loadFileName);

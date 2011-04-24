@@ -14,6 +14,7 @@ Player::Player(Robot* _rbt, int _framerate): channels(45) {
 	this->framerate = _framerate;
 	this->increment = 1.0 / _framerate;
 	this->currentTime = 0.0;
+	this->keyframeAmt = 0;
 }
 
 void Player::addKeyFrame(){
@@ -24,21 +25,21 @@ void Player::addKeyFrame(){
 		limbRoation = this->rbt->getLimbRotation(currentLimb);
 		
 		Keyframe *frameX = new Keyframe();
-		frameX->Time = this->currentTime;
+		frameX->Time = this->keyframeAmt;
 		frameX->Value = limbRoation[0];
 		frameX->RuleIn = "flat";
 		frameX->RuleOut = "flat";
 		this->channels[i].insertKeyFrame(frameX);
 		
 		Keyframe *frameY = new Keyframe();
-		frameY->Time = this->currentTime;
+		frameY->Time = this->keyframeAmt;
 		frameY->Value = limbRoation[1];
 		frameY->RuleIn = "flat";
 		frameY->RuleOut = "flat";
 		this->channels[i+1].insertKeyFrame(frameY);
 		
 		Keyframe *frameZ = new Keyframe();
-		frameZ->Time = this->currentTime;
+		frameZ->Time = this->keyframeAmt;
 		frameZ->Value = limbRoation[2];
 		frameZ->RuleIn = "flat";
 		frameZ->RuleOut = "flat";
@@ -46,10 +47,12 @@ void Player::addKeyFrame(){
 		
 		currentLimb++;
 	}
+	
+	this->keyframeAmt++;
 }
 
 void Player::play(bool isForward){
-	while (this->currentTime < this->channels.end()->getMaxTime()) {
+	while (this->currentTime < this->channels[0].getMaxTime()) {
 		this->updatePose();
 		this->currentTime += this->increment;		
 	}
