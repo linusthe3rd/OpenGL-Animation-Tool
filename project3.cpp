@@ -27,6 +27,11 @@
 #include "Camera.h"
 #include "Robot.h"
 
+#define SPACEBAR 32
+
+#define TIMERMSECS 33
+#define FRAMERATE 20
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
@@ -63,13 +68,16 @@
 
 Camera cam;
 int cameraState, axisState;
-bool isDragging, isPlaying;
+bool isDragging, isPlaying, isForward;
 int prevX, prevY;
 char* loadFileName;
 char* saveFileName;
 
 Robot *robot;
 Player *player;
+
+int startTime;
+int prevTime;
 
 void display(void){
 	// Clear Color and Depth Buffers
@@ -101,13 +109,24 @@ void display(void){
 	glEnd();
 	
 	//draw robot
-	if (isPlaying) {
-		player->incrementFrame();
-	} else {
-		robot->draw();
-	}
+	robot->draw();
 	
 	glutSwapBuffers();
+}
+
+void animate(int value) {
+	int timerMS = int(( 1.0 / FRAMERATE ) * 1000);
+	glutTimerFunc(timerMS, animate, 0);
+	
+	if (isPlaying) {
+		if (isForward) {
+			player->incrementFrame();
+		} else {
+			player->decrementFrame();
+		}
+		
+		glutPostRedisplay();
+	}
 }
 
 void changeSize(int w, int h) {
@@ -214,10 +233,14 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 		axisState = Z_AXIS;
 	} else if (key == 'f') {
 		isPlaying = true;
+		isForward = true;
 	} else if (key == 'b') {
 		isPlaying = true;
+		isForward = false;
 	} else if (key == 's') {
 		isPlaying = false;
+	} else if (key == SPACEBAR) {
+		player->addKeyFrame();
 	}
 }
 
@@ -225,13 +248,17 @@ void onSpecialKeyboardCB(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_LEFT:
 			player->decrementFrame();
+			glutPostRedisplay();
 			break;
 		case GLUT_KEY_RIGHT:
 			player->incrementFrame();
+			glutPostRedisplay();
 			break;
 		default:
 			break;
 	}
+	
+	
 }
 
 void saveCurrentPose(){
@@ -279,7 +306,9 @@ void init(){
 	
 	// set up the event callbacks
 	glutDisplayFunc(display); 
-	glutIdleFunc(display);
+	
+	int timerMS = int(( 1.0 / FRAMERATE ) * 1000);
+	glutTimerFunc(timerMS, animate, 0);
 	glutReshapeFunc(changeSize);
 	
 	glutMouseFunc(onMouseCB); 
@@ -331,8 +360,9 @@ void init(){
 	isDragging = false;
 	
 	robot = new Robot();
-	player = new Player(robot, 30);
+	player = new Player(robot, FRAMERATE);
 	isPlaying = false;
+	isForward = true;
 	
 	if (loadFileName != NULL) {
 		robot->loadPose(loadFileName);

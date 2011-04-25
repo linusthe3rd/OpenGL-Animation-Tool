@@ -9,11 +9,13 @@
 
 #include "Player.h"
 
+#define FRAME_INC 10
+
 Player::Player(Robot* _rbt, int _framerate): channels(45) {
 	this->rbt = _rbt;
 	this->framerate = _framerate;
 	this->increment = 1.0 / _framerate;
-	this->currentTime = 0.0;
+	this->currentFrame = 0;
 	this->keyframeAmt = 0;
 	this->isForward = true;
 }
@@ -26,21 +28,21 @@ void Player::addKeyFrame(){
 		limbRoation = this->rbt->getLimbRotation(currentLimb);
 		
 		Keyframe *frameX = new Keyframe();
-		frameX->Time = float (this->keyframeAmt);
+		frameX->Time = this->keyframeAmt * FRAME_INC;
 		frameX->Value = limbRoation[0];
 		frameX->RuleIn = "flat";
 		frameX->RuleOut = "flat";
 		this->channels[i].insertKeyFrame(frameX);
 		
 		Keyframe *frameY = new Keyframe();
-		frameY->Time = float (this->keyframeAmt);
+		frameY->Time = this->keyframeAmt * FRAME_INC;
 		frameY->Value = limbRoation[1];
 		frameY->RuleIn = "flat";
 		frameY->RuleOut = "flat";
 		this->channels[i+1].insertKeyFrame(frameY);
 		
 		Keyframe *frameZ = new Keyframe();
-		frameZ->Time = float (this->keyframeAmt);
+		frameZ->Time = this->keyframeAmt * FRAME_INC;
 		frameZ->Value = limbRoation[2];
 		frameZ->RuleIn = "flat";
 		frameZ->RuleOut = "flat";
@@ -52,23 +54,23 @@ void Player::addKeyFrame(){
 	this->keyframeAmt++;
 }
 
-void Player::play(){
-	while (this->currentTime < this->channels[0].getMaxTime()) {
-		this->updatePose(this->isForward);
-		this->currentTime += this->increment;	
-		this->rbt->draw();
-	}
-}
-
-void Player::stop(){}
-
 void Player::incrementFrame(){
-	this->currentTime += this->increment;
+	if (this->currentFrame > this->channels[0].getMaxTime()) {
+		this->currentFrame = 0;
+		return;
+	}
+	
 	this->updatePose(true);
+	this->currentFrame++;
 }
 void Player::decrementFrame(){
-	this->currentTime -= this->increment;
+	if (this->currentFrame <= 0) {
+		this->currentFrame = this->channels[0].getMaxTime();
+		//return;
+	}
+	
 	this->updatePose(false);
+	this->currentFrame--;
 }
 
 void Player::updatePose(bool isForward){
@@ -81,30 +83,18 @@ void Player::updatePose(bool isForward){
 	int curLimbIndex = 0;
 	
 	for (int i = 0; i < channels.size(); i+=3) {
-		this->rbt->setEditableLimb(curLimbIndex);
-		
-		x = channels[i].Evaluate(this->currentTime) * direction;
-		this->rbt->rotateLimb(x, 1.0, 0.0, 0.0);
-		
-		y = channels[i+1].Evaluate(this->currentTime) * direction;
-		this->rbt->rotateLimb(y, 0.0, 1.0, 0.0);
-		
-		z = channels[i+2].Evaluate(this->currentTime) * direction;
-		this->rbt->rotateLimb(z, 0.0, 0.0, 1.0);
+		x = channels[i].Evaluate(this->currentFrame);
+		y = channels[i+1].Evaluate(this->currentFrame);
+		z = channels[i+2].Evaluate(this->currentFrame);
+		if (channels[i].isKeyFrame(this->currentFrame) ) {
+			this->rbt->setLimbRotation(curLimbIndex, x, y, z);
+		} else {
+			this->rbt->setEditableLimb(curLimbIndex);
+			this->rbt->rotateLimb(x*direction, 1.0, 0.0, 0.0);
+			this->rbt->rotateLimb(y*direction, 0.0, 1.0, 0.0);
+			this->rbt->rotateLimb(z*direction, 0.0, 0.0, 1.0);
+		}
 		
 		curLimbIndex++;
 	}
-}
-
-void Player::setFramerate(int rate){
-	this->framerate = rate;
-	this->increment = 1.0 / rate;
-}
-
-int Player::getFramerate(){
-	return this->framerate;
-}
-
-void Player::setPlayDirection(bool direction){
-	this->isForward = direction;
 }

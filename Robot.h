@@ -31,6 +31,8 @@ private:
 	BodyPart *lFoot, *rFoot;
 	BodyPart *curLimb;
 	
+	BodyPart* getLimb(int limb);
+	
 public:
 	Robot();
 	
@@ -41,5 +43,6 @@ public:
 	void draw();
 	vector<float> getLimbRotation(int limb);
 	string toString();
+	void setLimbRotation(int limb, float xAngle, float yAngle, float zAngle);
 };
 #endif

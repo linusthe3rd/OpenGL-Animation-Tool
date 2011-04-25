@@ -203,61 +203,73 @@ void Robot::rotateLimb(float angle, float x, float y, float z){
 		this->curLimb->rotate(angle, x, y, z);
 }
 
-vector<float> Robot::getLimbRotation(int limb){
-	vector<float> rotations(3,0);
-	
-	Rotation_t rot;
+void Robot::setLimbRotation(int limb, float xAngle, float yAngle, float zAngle){
+	BodyPart *limbPtr = this->getLimb(limb);
+	limbPtr->setRotationAngles(xAngle, yAngle, zAngle);
+}
+
+BodyPart* Robot::getLimb(int limb){
+	BodyPart *limbPtr = NULL;
 	
 	switch (limb) {
 		case HEAD:
-			rot = this->head->getRotation();
+			limbPtr = this->head;
 			break;
 		case UPPER_TORSO:
-			rot = this->upperTorso->getRotation();
+			limbPtr = this->upperTorso;
 			break;
 		case LOWER_TORSO:
-			rot = this->lowerTorso->getRotation();
+			limbPtr = this->lowerTorso;
 			break;
 		case UPPER_LEFT_ARM:
-			rot = this->lUpperArm->getRotation();
+			limbPtr = this->lUpperArm;
 			break;
 		case LOWER_LEFT_ARM:
-			rot = this->lLowerArm->getRotation();
+			limbPtr = this->lLowerArm;
 			break;
 		case LEFT_HAND:
-			rot = this->lHand->getRotation();
+			limbPtr = this->lHand;
 			break;
 		case UPPER_RIGHT_ARM:
-			rot = this->rUpperArm->getRotation();
+			limbPtr = this->rUpperArm;
 			break;
 		case LOWER_RIGHT_ARM:
-			rot = this->rLowerArm->getRotation();
+			limbPtr = this->rLowerArm;
 			break;
 		case RIGHT_HAND:
-			rot = this->rHand->getRotation();
+			limbPtr = this->rHand;
 			break;
 		case UPPER_LEFT_LEG:
-			rot = this->lUpperLeg->getRotation();
+			limbPtr = this->lUpperLeg;
 			break;
 		case LOWER_LEFT_LEG:
-			rot = this->lLowerLeg->getRotation();
+			limbPtr = this->lLowerLeg;
 			break;
 		case LEFT_FOOT:
-			rot = this->lFoot->getRotation();
+			limbPtr = this->lFoot;
 			break;
 		case UPPER_RIGHT_LEG:
-			rot = this->rUpperLeg->getRotation();
+			limbPtr = this->rUpperLeg;
 			break;
 		case LOWER_RIGHT_LEG:
-			rot = this->rLowerLeg->getRotation();
+			limbPtr = this->rLowerLeg;
 			break;
 		case RIGHT_FOOT:
-			rot = this->rFoot->getRotation();
+			limbPtr = this->rFoot;
 			break;
 		default:
 			break;
 	}
 	
+	return limbPtr;
+	
+}
+
+vector<float> Robot::getLimbRotation(int limb){
+	vector<float> rotations(3,0);
+	BodyPart *limbPtr = this->getLimb(limb);
+	
+	Rotation_t rot = limbPtr->getRotation();
 	rotations[0] = rot.x;
 	rotations[1] = rot.y;
 	rotations[2] = rot.z;
@@ -266,55 +278,7 @@ vector<float> Robot::getLimbRotation(int limb){
 }
 
 void Robot::setEditableLimb(int limb){
-	switch (limb) {
-		case HEAD:
-			this->curLimb = this->head;
-			break;
-		case UPPER_TORSO:
-			this->curLimb = this->upperTorso;
-			break;
-		case LOWER_TORSO:
-			this->curLimb = this->lowerTorso;
-			break;
-		case UPPER_LEFT_ARM:
-			this->curLimb = this->lUpperArm;
-			break;
-		case LOWER_LEFT_ARM:
-			this->curLimb = this->lLowerArm;
-			break;
-		case LEFT_HAND:
-			this->curLimb = this->lHand;
-			break;
-		case UPPER_RIGHT_ARM:
-			this->curLimb = this->rUpperArm;
-			break;
-		case LOWER_RIGHT_ARM:
-			this->curLimb = this->rLowerArm;
-			break;
-		case RIGHT_HAND:
-			this->curLimb = this->rHand;
-			break;
-		case UPPER_LEFT_LEG:
-			this->curLimb = this->lUpperLeg;
-			break;
-		case LOWER_LEFT_LEG:
-			this->curLimb = this->lLowerLeg;
-			break;
-		case LEFT_FOOT:
-			this->curLimb = this->lFoot;
-			break;
-		case UPPER_RIGHT_LEG:
-			this->curLimb = this->rUpperLeg;
-			break;
-		case LOWER_RIGHT_LEG:
-			this->curLimb = this->rLowerLeg;
-			break;
-		case RIGHT_FOOT:
-			this->curLimb = this->rFoot;
-			break;
-		default:
-			break;
-	}	
+	this->curLimb = this->getLimb(limb);
 }
 
 /**

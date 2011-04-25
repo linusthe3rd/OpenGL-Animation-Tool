@@ -11,17 +11,31 @@
 
 Channel::Channel() : keyFrameArr(){}
 
-float Channel::Evaluate(float time){
+float Channel::Evaluate(int time){
 	Keyframe_Time_functor f;
-	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, f);
-	Keyframe k1 = *ubIter;
-	Keyframe k0 = *(--ubIter);
-	
-	float u = InvLerp(time, k0.Time, k1.Time);
-	//float t = Lerp(u, k0->Time, k1->Time);
-	
-	//return ( k0->A * pow(t, 3) ) + ( k0->B * pow(t, 2) ) + ( k0->C * t ) + k0->D;
-	return k0.D + u*( k0.C + u*( k0.B + u*k0.A) );
+	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, f);\
+	if	(ubIter != keyFrameArr.end()){
+		Keyframe k1 = *ubIter;
+		if (time == k1.Time) {
+			return k1.Value;
+		}
+		
+		Keyframe k0 = *(--ubIter);
+		if (time == k0.Time) {
+			return k0.Value;
+		}
+		
+		float tDelta1 = float(time - k0.Time);
+		float tDelta2 = float(k1.Time - k0.Time);
+		float u = tDelta1 / tDelta2;
+		
+		return k0.D + u*( k0.C + u*( k0.B + u*k0.A) );
+	} else {
+		Keyframe k0 = *(--ubIter);
+		if (time == k0.Time) {
+			return k0.Value;
+		}
+	}
 }
 
 void Channel::insertKeyFrame(Keyframe *frame){
@@ -32,12 +46,17 @@ void Channel::insertKeyFrame(Keyframe *frame){
 	this->Precompute();
 }
 
+bool Channel::isKeyFrame(int time){
+	Keyframe_Time_functor f;
+	return binary_search(keyFrameArr.begin(), keyFrameArr.end(), time, f);
+}
+
 void Channel::Precompute(){
 	this->computeTangents();
 	this->computeConstants();
 }
 	
-float Channel::getMaxTime(){
+int Channel::getMaxTime(){
 	Keyframe frame = *(--this->keyFrameArr.end());
 	return frame.Time;
 }

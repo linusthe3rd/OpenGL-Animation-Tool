@@ -34,7 +34,7 @@ using namespace std;
 #define InvLerp(t, t0, t1) ( t-t0 ) / (t1 - t0)
 
 struct Keyframe {
-	float Time; //The time in which the keyframe occurs
+	int Time; //The time in which the keyframe occurs
 	float Value; //The value of the frame
 	float TangentIn,TangentOut; //"flat", "linear", or "smooth"
 	string RuleIn,RuleOut; 
@@ -48,8 +48,12 @@ struct Keyframe_functor {
 };
 
 struct Keyframe_Time_functor {
-	bool operator()( float time, const Keyframe &frame){
+	bool operator()( int time, const Keyframe &frame){
 		return time < frame.Time;
+	}
+	
+	bool operator()( const Keyframe &frame, int time){
+		return time > frame.Time;
 	}
 };
 
@@ -64,11 +68,11 @@ const float HERMITE_MATRIX[16] = {
 class Channel {
 public:
 	Channel();
-	float Evaluate(float time);
+	float Evaluate(int time);
 	void insertKeyFrame(Keyframe *frame);
 	void Precompute();
-	float getMaxTime();
-	
+	int getMaxTime();
+	bool isKeyFrame(int time);
 private:
 	vector<struct Keyframe> keyFrameArr;
 	void computeTangents();

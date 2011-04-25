@@ -34,7 +34,7 @@ private:
 	vector<Channel> channels;
 	Robot *rbt;
 	
-	float currentTime;
+	int currentFrame;
 	int framerate;
 	float increment;
 	int keyframeAmt;
