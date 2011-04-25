@@ -19,7 +19,7 @@ public:
 	
 	void addKeyFrame();
 	
-	void play(bool isForward);
+	void play();
 	void stop();
 	
 	void incrementFrame();
@@ -27,6 +27,8 @@ public:
 	
 	void setFramerate(int rate);
 	int getFramerate();
+	
+	void setPlayDirection(bool direction);
 	
 private:
 	vector<Channel> channels;
@@ -36,8 +38,9 @@ private:
 	int framerate;
 	float increment;
 	int keyframeAmt;
+	bool isForward;
 	
-	void updatePose();
+	void updatePose(bool isForward);
 };
 
 #endif

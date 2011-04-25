@@ -63,7 +63,7 @@
 
 Camera cam;
 int cameraState, axisState;
-bool isDragging;
+bool isDragging, isPlaying;
 int prevX, prevY;
 char* loadFileName;
 char* saveFileName;
@@ -101,7 +101,11 @@ void display(void){
 	glEnd();
 	
 	//draw robot
-	robot->draw();
+	if (isPlaying) {
+		player->incrementFrame();
+	} else {
+		robot->draw();
+	}
 	
 	glutSwapBuffers();
 }
@@ -208,15 +212,22 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 		axisState = Y_AXIS;
 	} else if (key == '3') {
 		axisState = Z_AXIS;
-	} else if (key == 13) {
-		player->play(true);
+	} else if (key == 'f') {
+		isPlaying = true;
+	} else if (key == 'b') {
+		isPlaying = true;
+	} else if (key == 's') {
+		isPlaying = false;
 	}
 }
 
 void onSpecialKeyboardCB(int key, int x, int y) { 
 	switch (key) {
-		case 13:
-			player->play(true);
+		case GLUT_KEY_LEFT:
+			player->decrementFrame();
+			break;
+		case GLUT_KEY_RIGHT:
+			player->incrementFrame();
 			break;
 		default:
 			break;
@@ -321,6 +332,7 @@ void init(){
 	
 	robot = new Robot();
 	player = new Player(robot, 30);
+	isPlaying = false;
 	
 	if (loadFileName != NULL) {
 		robot->loadPose(loadFileName);
