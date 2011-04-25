@@ -72,12 +72,38 @@ bool isDragging, isPlaying, isForward;
 int prevX, prevY;
 char* loadFileName;
 char* saveFileName;
-
+char frameText[100];
 Robot *robot;
 Player *player;
 
-int startTime;
-int prevTime;
+int currentFrame;
+bool isKeyframe;
+
+
+void renderBitmapString(
+						float x,
+						float y,
+						float z,
+						void *font,
+						char *string) {
+	
+	char *c;
+	glRasterPos3f(x, y,z);
+	for (c=string; *c != '\0'; c++) {
+		glutBitmapCharacter(font, *c);
+	}
+}
+
+void updateFrameText(){
+	if (currentFrame < 0) {
+		isKeyframe = true;
+		currentFrame *= -1;
+	} else {
+		isKeyframe = false;
+	}
+
+	sprintf(frameText, "Frame: %d", currentFrame);
+}
 
 void display(void){
 	// Clear Color and Depth Buffers
@@ -91,8 +117,23 @@ void display(void){
 			  cam.lookAt.x, cam.lookAt.y,  cam.lookAt.z,
 			  cam.upVector.x, cam.upVector.y,  cam.upVector.z);
 	
+	glDisable (GL_LIGHTING);
+    glDisable (GL_LIGHT0);
+	
+	if (isKeyframe) {
+		glColor3f(0.0f, 1.0f, 0.0f);
+	} else {
+		glColor3f(1.0f, 1.0f, 1.0f);
+	}
+
+	renderBitmapString(1.0f, 2.5f, 0.0f, GLUT_BITMAP_HELVETICA_18, frameText);
+	//renderBitmapString(1.0f, 2.5f, 0.0f, GLUT_BITMAP_HELVETICA_18, "Framerate: 1");
+	
+	glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+	
 	// Draw floor
-	GLfloat ambient[] = {0.9f, 0.9f, 0.9f, 1.0};
+	GLfloat ambient[] = {0.5f, 0.9f, 0.9f, 1.0};
 	GLfloat diffuse[] = {0.9f, 0.9f, 0.9f, 1.0};
 	GLfloat specular[] = {0.9f, 0.9f, 0.9f, 1.0};
 	GLfloat shine = 100.0;
@@ -120,9 +161,11 @@ void animate(int value) {
 	
 	if (isPlaying) {
 		if (isForward) {
-			player->incrementFrame();
+			player->incrementFrame(&currentFrame);
+			updateFrameText();
 		} else {
-			player->decrementFrame();
+			player->decrementFrame(&currentFrame);
+			updateFrameText();
 		}
 		
 		glutPostRedisplay();
@@ -247,11 +290,13 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 void onSpecialKeyboardCB(int key, int x, int y) { 
 	switch (key) {
 		case GLUT_KEY_LEFT:
-			player->decrementFrame();
+			player->decrementFrame(&currentFrame);
+			updateFrameText();
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_RIGHT:
-			player->incrementFrame();
+			player->incrementFrame(&currentFrame);
+			updateFrameText();
 			glutPostRedisplay();
 			break;
 		default:
@@ -363,6 +408,8 @@ void init(){
 	player = new Player(robot, FRAMERATE);
 	isPlaying = false;
 	isForward = true;
+	currentFrame = 0;
+	updateFrameText();
 	
 	if (loadFileName != NULL) {
 		robot->loadPose(loadFileName);

@@ -54,26 +54,37 @@ void Player::addKeyFrame(){
 	this->keyframeAmt++;
 }
 
-void Player::incrementFrame(){
+void Player::incrementFrame(int *frameCnt){
 	if (this->currentFrame > this->channels[0].getMaxTime()) {
 		this->currentFrame = 0;
+		*frameCnt = this->currentFrame;
 		return;
 	}
 	
-	this->updatePose(true);
+	bool isKeyframe = this->updatePose(true);
 	this->currentFrame++;
+	*frameCnt = this->currentFrame;
+	
+	if (isKeyframe) {
+		*frameCnt *= -1;
+	}
 }
-void Player::decrementFrame(){
+void Player::decrementFrame(int *frameCnt){
 	if (this->currentFrame <= 0) {
 		this->currentFrame = this->channels[0].getMaxTime();
 		//return;
 	}
 	
-	this->updatePose(false);
+	bool isKeyframe = this->updatePose(false);
 	this->currentFrame--;
+	*frameCnt = this->currentFrame;
+	
+	if (isKeyframe) {
+		*frameCnt *= -1;
+	}
 }
 
-void Player::updatePose(bool isForward){
+bool Player::updatePose(bool isForward){
 	float x=0.0, y=0.0, z=0.0;
 	float direction = 1.0;
 	
@@ -82,12 +93,14 @@ void Player::updatePose(bool isForward){
 	}
 	int curLimbIndex = 0;
 	
+	bool isKeyframe = false;
 	for (int i = 0; i < channels.size(); i+=3) {
 		x = channels[i].Evaluate(this->currentFrame);
 		y = channels[i+1].Evaluate(this->currentFrame);
 		z = channels[i+2].Evaluate(this->currentFrame);
 		if (channels[i].isKeyFrame(this->currentFrame) ) {
 			this->rbt->setLimbRotation(curLimbIndex, x, y, z);
+			isKeyframe = true;
 		} else {
 			this->rbt->setEditableLimb(curLimbIndex);
 			this->rbt->rotateLimb(x*direction, 1.0, 0.0, 0.0);
@@ -97,4 +110,6 @@ void Player::updatePose(bool isForward){
 		
 		curLimbIndex++;
 	}
+	
+	return isKeyframe;
 }

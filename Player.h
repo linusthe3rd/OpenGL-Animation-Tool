@@ -22,8 +22,8 @@ public:
 	void play();
 	void stop();
 	
-	void incrementFrame();
-	void decrementFrame();
+	void incrementFrame(int *frameCnt);
+	void decrementFrame(int *frameCnt);
 	
 	void setFramerate(int rate);
 	int getFramerate();
@@ -40,7 +40,7 @@ private:
 	int keyframeAmt;
 	bool isForward;
 	
-	void updatePose(bool isForward);
+	bool updatePose(bool isForward);
 };
 
 #endif
