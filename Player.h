@@ -15,7 +15,7 @@
 
 class Player{
 public:
-	Player(Robot* _rbt, int _framerate);
+	Player(Robot* _rbt);
 	
 	void addKeyFrame();
 	
@@ -35,8 +35,6 @@ private:
 	Robot *rbt;
 	
 	int currentFrame;
-	int framerate;
-	float increment;
 	int keyframeAmt;
 	bool isForward;
 	

@@ -30,7 +30,6 @@
 #define SPACEBAR 32
 
 #define TIMERMSECS 33
-#define FRAMERATE 20
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -43,6 +42,13 @@
 #define X_AXIS 1
 #define Y_AXIS 2
 #define Z_AXIS 3
+
+#define FRAMERATE_10 1000
+#define FRAMERATE_20 200
+#define FRAMERATE_30 300
+#define FRAMERATE_40 400
+#define FRAMERATE_50 500
+#define FRAMERATE_60 600
 
 #define ZERO -1
 #define SAVE_BTN 100
@@ -68,7 +74,7 @@
 
 Camera cam;
 int cameraState, axisState;
-bool isDragging, isPlaying, isForward;
+bool isDragging, isShiftDown, isPlaying, isForward;
 int prevX, prevY;
 char* loadFileName;
 char* saveFileName;
@@ -76,7 +82,7 @@ char frameText[100];
 Robot *robot;
 Player *player;
 
-int currentFrame;
+int currentFrame, framerate;
 bool isKeyframe;
 
 
@@ -156,7 +162,7 @@ void display(void){
 }
 
 void animate(int value) {
-	int timerMS = int(( 1.0 / FRAMERATE ) * 1000);
+	int timerMS = int(( 1.0 / framerate ) * 1000);
 	glutTimerFunc(timerMS, animate, 0);
 	
 	if (isPlaying) {
@@ -191,6 +197,7 @@ void changeSize(int w, int h) {
 
 void onMouseCB(int button, int state, int x, int y) {
 	if( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN ) {
+		isShiftDown = (glutGetModifiers() == GLUT_ACTIVE_SHIFT);
 		isDragging = true;
 		prevX = x;
 		prevY = y;
@@ -203,55 +210,65 @@ void onMouseCB(int button, int state, int x, int y) {
 
 void onMouseDragCB(int x, int y){
 	if (isDragging) {
-		float rotateAngle = 0.0;
-		
-		switch (cameraState) {
-			case PAN_STATE:
-				if (x > prevX) {
-					cam.turn(0.05f, 0, 1, 0);
-				} else {
-					cam.turn(-0.05f, 0, 1, 0);
-				}
-				break;
-			case ZOOM_STATE:
-				if (y > prevY) {
-					cam.zoom(0.05f);
-				} else {
-					cam.zoom(-0.05f);
-				}
-				break;
-			case ROTATE_STATE:
-				if (x > prevX) {
-					cam.roll(0.1);
-				} else {
-					cam.roll(-0.1);
-				}
-				break;
-			case EDIT_STATE:
-				if (x > prevX) {
-					rotateAngle = 10.0;
-				} else {
-					rotateAngle = -10.0;
-				}
-				
-				switch (axisState) {
-					case X_AXIS:
-						robot->rotateLimb(rotateAngle, 1.0, 0.0, 0.0);
-						break;
-					case Y_AXIS:
-						robot->rotateLimb(rotateAngle, 0.0, 1.0, 0.0);
-						break;
-					case Z_AXIS:
-						robot->rotateLimb(rotateAngle, 0.0, 0.0, 1.0);
-						break;
-					default:
-						break;
-				}
-				break;
-			default:
-				break;
+		float rotateAngle = 0.0;	
+		if (isShiftDown){
+			if (x > prevX) {
+				player->incrementFrame(&currentFrame);
+				updateFrameText();
+			} else {
+				player->decrementFrame(&currentFrame);
+				updateFrameText();
+			}
+		} else {
+			switch (cameraState) {
+				case PAN_STATE:
+					if (x > prevX) {
+						cam.turn(0.05f, 0, 1, 0);
+					} else {
+						cam.turn(-0.05f, 0, 1, 0);
+					}
+					break;
+				case ZOOM_STATE:
+					if (y > prevY) {
+						cam.zoom(0.05f);
+					} else {
+						cam.zoom(-0.05f);
+					}
+					break;
+				case ROTATE_STATE:
+					if (x > prevX) {
+						cam.roll(0.1);
+					} else {
+						cam.roll(-0.1);
+					}
+					break;
+				case EDIT_STATE:
+					if (x > prevX) {
+						rotateAngle = 10.0;
+					} else {
+						rotateAngle = -10.0;
+					}
+					
+					switch (axisState) {
+						case X_AXIS:
+							robot->rotateLimb(rotateAngle, 1.0, 0.0, 0.0);
+							break;
+						case Y_AXIS:
+							robot->rotateLimb(rotateAngle, 0.0, 1.0, 0.0);
+							break;
+						case Z_AXIS:
+							robot->rotateLimb(rotateAngle, 0.0, 0.0, 1.0);
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+			
 		}
-		
+
 		prevX = x;
 		prevY = y;
 	}
@@ -332,6 +349,18 @@ void onContextMenuCB(int option){
 		saveCurrentPose();
 	} else if (option == ADD_KEYFRAME) {
 		player->addKeyFrame();
+	} else if (option == FRAMERATE_10){
+		framerate = 10;
+	} else if (option == FRAMERATE_20){
+		framerate = 20;
+	} else if (option == FRAMERATE_30){
+		framerate = 30;
+	} else if (option == FRAMERATE_40){
+		framerate = 40;
+	} else if (option == FRAMERATE_50){
+		framerate = 50;
+	} else if (option == FRAMERATE_60){
+		framerate = 60;
 	} else {
 		robot->setEditableLimb(option);
 	}
@@ -352,7 +381,7 @@ void init(){
 	// set up the event callbacks
 	glutDisplayFunc(display); 
 	
-	int timerMS = int(( 1.0 / FRAMERATE ) * 1000);
+	int timerMS = int(( 1.0 / 30 ) * 1000);
 	glutTimerFunc(timerMS, animate, 0);
 	glutReshapeFunc(changeSize);
 	
@@ -361,13 +390,23 @@ void init(){
 	glutKeyboardFunc(onKeyboardCB);
 	glutSpecialFunc(onSpecialKeyboardCB); 
 	
+	int frMenu = glutCreateMenu(onContextMenuCB);
+	glutAddMenuEntry("10",FRAMERATE_10);
+	glutAddMenuEntry("20",FRAMERATE_20);
+	glutAddMenuEntry("30",FRAMERATE_30);
+	glutAddMenuEntry("40",FRAMERATE_40);
+	glutAddMenuEntry("50",FRAMERATE_50);
+	glutAddMenuEntry("60",FRAMERATE_60);
+	
+	
 	glutCreateMenu(onContextMenuCB);
+	glutAddSubMenu("Set Framerate", frMenu);
+	
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	if (saveFileName != NULL || loadFileName != NULL) {
 		glutAddMenuEntry("Save Pose", SAVE_BTN);
 	}
 	
-	glutAddMenuEntry("Add key frame", ADD_KEYFRAME);
 	glutAddMenuEntry("", ZERO);
 	glutAddMenuEntry("Head", HEAD);
 	glutAddMenuEntry("", ZERO);
@@ -403,12 +442,14 @@ void init(){
 	cameraState = PAN_STATE;
 	axisState = X_AXIS;
 	isDragging = false;
+	isShiftDown = false;
 	
 	robot = new Robot();
-	player = new Player(robot, FRAMERATE);
+	player = new Player(robot);
 	isPlaying = false;
 	isForward = true;
 	currentFrame = 0;
+	framerate = 30;
 	updateFrameText();
 	
 	if (loadFileName != NULL) {

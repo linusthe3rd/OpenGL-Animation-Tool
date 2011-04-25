@@ -11,10 +11,8 @@
 
 #define FRAME_INC 10
 
-Player::Player(Robot* _rbt, int _framerate): channels(45) {
+Player::Player(Robot* _rbt): channels(45) {
 	this->rbt = _rbt;
-	this->framerate = _framerate;
-	this->increment = 1.0 / _framerate;
 	this->currentFrame = 0;
 	this->keyframeAmt = 0;
 	this->isForward = true;
@@ -62,12 +60,13 @@ void Player::incrementFrame(int *frameCnt){
 	}
 	
 	bool isKeyframe = this->updatePose(true);
-	this->currentFrame++;
 	*frameCnt = this->currentFrame;
 	
 	if (isKeyframe) {
 		*frameCnt *= -1;
 	}
+	
+	this->currentFrame++;
 }
 void Player::decrementFrame(int *frameCnt){
 	if (this->currentFrame <= 0) {
@@ -76,12 +75,13 @@ void Player::decrementFrame(int *frameCnt){
 	}
 	
 	bool isKeyframe = this->updatePose(false);
-	this->currentFrame--;
 	*frameCnt = this->currentFrame;
 	
 	if (isKeyframe) {
 		*frameCnt *= -1;
 	}
+	
+	this->currentFrame--;
 }
 
 bool Player::updatePose(bool isForward){
