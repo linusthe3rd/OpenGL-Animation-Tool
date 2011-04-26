@@ -30,6 +30,8 @@ public:
 	
 	void setPlayDirection(bool direction);
 	
+	string toString();
+	
 private:
 	vector<Channel> channels;
 	Robot *rbt;

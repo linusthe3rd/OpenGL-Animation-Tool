@@ -113,3 +113,13 @@ bool Player::updatePose(bool isForward){
 	
 	return isKeyframe;
 }
+
+string Player::toString(){
+	ostringstream oss;
+	
+	for (int i = 0; i < channels.size(); i++) {
+		oss << channels[i].toString();
+	}
+	
+	return oss.str();
+}

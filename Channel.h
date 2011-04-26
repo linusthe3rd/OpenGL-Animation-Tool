@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <string>
 #include <math.h>
+#include <sstream>
 
 using namespace std;
 
@@ -73,6 +74,7 @@ public:
 	void Precompute();
 	int getMaxTime();
 	bool isKeyFrame(int time);
+	string toString();
 private:
 	vector<struct Keyframe> keyFrameArr;
 	void computeTangents();

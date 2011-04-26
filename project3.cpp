@@ -52,6 +52,7 @@
 
 #define ZERO -1
 #define SAVE_BTN 100
+#define SAVE_ANIMATION_BTN 101
 #define HEAD 0
 #define UPPER_TORSO 1
 #define LOWER_TORSO 2
@@ -78,6 +79,8 @@ bool isDragging, isShiftDown, isPlaying, isForward;
 int prevX, prevY;
 char* loadFileName;
 char* saveFileName;
+char* loadAnimFileName;
+char* saveAnimFileName;
 char frameText[100];
 Robot *robot;
 Player *player;
@@ -344,9 +347,32 @@ void saveCurrentPose(){
 	}
 }
 
+void saveCurrentAnimation(){
+	char* fName = NULL;
+	if (saveAnimFileName != NULL ) {
+		fName = saveAnimFileName;
+	} else if (loadAnimFileName != NULL){
+		fName = loadAnimFileName;
+	}
+	
+	if (fName != NULL){
+		remove(fName);
+		ofstream fout(fName);
+		
+		if (fout) {
+			fout << player->toString();
+			fout.close();
+		} else {
+			cout << "Unable to write " << saveFileName << endl;
+		}
+	}
+}
+
 void onContextMenuCB(int option){
 	if (option == SAVE_BTN) {
 		saveCurrentPose();
+	} else if (option == SAVE_ANIMATION_BTN) {
+		saveCurrentAnimation();
 	} else if (option == ADD_KEYFRAME) {
 		player->addKeyFrame();
 	} else if (option == FRAMERATE_10){
@@ -407,6 +433,10 @@ void init(){
 		glutAddMenuEntry("Save Pose", SAVE_BTN);
 	}
 	
+	if (saveAnimFileName != NULL || loadAnimFileName != NULL) {
+		glutAddMenuEntry("Save Animation", SAVE_ANIMATION_BTN);
+	}
+	
 	glutAddMenuEntry("", ZERO);
 	glutAddMenuEntry("Head", HEAD);
 	glutAddMenuEntry("", ZERO);
@@ -459,12 +489,18 @@ void init(){
 
 
 int main (int argc, char * argv[]) {
-	if (argc > 1) {
-		char* arg = argv[1];
+	char* arg;
+	for (int i = 0; i < argc; i++) {
+		arg = argv[i];
+		
 		if (strcmp(arg, "-s") == 0) {
-			saveFileName = argv[2];
+			saveFileName = argv[i+1];
 		} else if (strcmp(arg, "-l") == 0) {
-			loadFileName = argv[2];
+			loadFileName = argv[i+1];
+		} else if (strcmp(arg, "-As") == 0) {
+			saveAnimFileName = argv[i+1];
+		} else if (strcmp(arg, "-Al") == 0) {
+			loadAnimFileName = argv[i+1];
 		}
 	}
 	
