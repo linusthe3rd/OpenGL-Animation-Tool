@@ -104,7 +104,7 @@ void renderBitmapString(
 }
 
 void updateFrameText(){
-	if (currentFrame < 0) {
+	if (currentFrame <= 0) {
 		isKeyframe = true;
 		currentFrame *= -1;
 	} else {

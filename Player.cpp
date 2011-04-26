@@ -57,8 +57,6 @@ void Player::incrementFrame(int *frameCnt){
 	
 	if (this->currentFrame > this->channels[0].getMaxTime()) {
 		this->currentFrame = 0;
-		*frameCnt = this->currentFrame;
-		return;
 	}
 	
 	bool isKeyframe = this->updatePose(true);
@@ -73,9 +71,10 @@ void Player::incrementFrame(int *frameCnt){
 void Player::decrementFrame(int *frameCnt){
 	if (!channels[0].hasMinKeyFrames) { return; }
 	
-	if (this->currentFrame <= 0) {
+	this->currentFrame--;
+	
+	if (this->currentFrame < 0) {
 		this->currentFrame = this->channels[0].getMaxTime();
-		//return;
 	}
 	
 	bool isKeyframe = this->updatePose(false);
@@ -84,8 +83,6 @@ void Player::decrementFrame(int *frameCnt){
 	if (isKeyframe) {
 		*frameCnt *= -1;
 	}
-	
-	this->currentFrame--;
 }
 
 bool Player::updatePose(bool isForward){	
