@@ -74,6 +74,13 @@ int Channel::getMaxTime(){
 void Channel::removeKeyframe(int time){
 	time_equals_keyframe f = { time };
 	vector<Keyframe>::iterator objIter = find_if(keyFrameArr.begin(), keyFrameArr.end(), f);
+	
+	if (objIter == keyFrameArr.begin() && keyFrameArr.size() > 1){
+		for (int i = 1; i < keyFrameArr.size(); i++) {
+			keyFrameArr[i].Time -= 10;
+		}
+	}
+	
 	keyFrameArr.erase(objIter);
 	this->Precompute();
 }
