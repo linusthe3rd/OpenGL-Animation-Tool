@@ -58,6 +58,14 @@ struct Keyframe_Time_functor {
 	}
 };
 
+struct time_equals_keyframe {
+	const int time;
+	
+	bool operator()(const Keyframe &frame){
+		return time == frame.Time;
+	}
+};
+
 const float HERMITE_MATRIX[16] = {
 	2, -2, 1, 1,
 	-3, 3, -2, -1,
@@ -74,6 +82,7 @@ public:
 	void Precompute();
 	int getMaxTime();
 	bool isKeyFrame(int time);
+	void removeKeyframe(int time);
 	string toString();
 private:
 	vector<struct Keyframe> keyFrameArr;

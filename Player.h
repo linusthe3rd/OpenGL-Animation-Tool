@@ -36,6 +36,8 @@ public:
 	
 	void loadAnim(char* fName);
 	
+	void removeKeyframe(int time);
+	
 private:
 	vector<Channel> channels;
 	Robot *rbt;

@@ -13,7 +13,7 @@ Channel::Channel() : keyFrameArr(){}
 
 float Channel::Evaluate(int time){
 	Keyframe_Time_functor f;
-	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, f);\
+	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, f);
 	if	(ubIter != keyFrameArr.end()){
 		Keyframe k1 = *ubIter;
 		if (time == k1.Time) {
@@ -36,6 +36,8 @@ float Channel::Evaluate(int time){
 			return k0.Value;
 		}
 	}
+	
+	return -1.0;
 }
 
 void Channel::insertKeyFrame(Keyframe *frame){
@@ -59,6 +61,13 @@ void Channel::Precompute(){
 int Channel::getMaxTime(){
 	Keyframe frame = *(--this->keyFrameArr.end());
 	return frame.Time;
+}
+
+void Channel::removeKeyframe(int time){
+	time_equals_keyframe f = { time };
+	vector<Keyframe>::iterator objIter = find_if(keyFrameArr.begin(), keyFrameArr.end(), f);
+	keyFrameArr.erase(objIter);
+	this->Precompute();
 }
 
 void Channel::computeTangents(){

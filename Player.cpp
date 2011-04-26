@@ -114,6 +114,12 @@ bool Player::updatePose(bool isForward){
 	return isKeyframe;
 }
 
+void Player::removeKeyframe(int time){
+	for (int i = 0; i < channels.size(); i++) {
+		channels[i].removeKeyframe(time);
+	}
+}
+
 string Player::toString(){
 	ostringstream oss;
 	

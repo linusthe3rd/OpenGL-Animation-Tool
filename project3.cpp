@@ -304,6 +304,9 @@ void onKeyboardCB(unsigned char key, int x, int y) {
 		isPlaying = false;
 	} else if (key == SPACEBAR) {
 		player->addKeyFrame();
+	} else if (key == 'd') {
+		player->removeKeyframe(currentFrame);
+		updateFrameText();
 	}
 }
 
