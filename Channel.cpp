@@ -9,7 +9,9 @@
 
 #include "Channel.h"
 
-Channel::Channel() : keyFrameArr(){}
+Channel::Channel() : keyFrameArr(){
+	this->hasMinKeyFrames = false;
+}
 
 float Channel::Evaluate(int time){
 	Keyframe_Time_functor f;
@@ -54,6 +56,12 @@ bool Channel::isKeyFrame(int time){
 }
 
 void Channel::Precompute(){
+	if (this->keyFrameArr.size() > 1) {
+		this->hasMinKeyFrames = true;
+	} else {
+		this->hasMinKeyFrames = false;
+	}
+
 	this->computeTangents();
 	this->computeConstants();
 }

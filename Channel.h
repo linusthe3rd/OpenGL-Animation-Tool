@@ -84,6 +84,8 @@ public:
 	bool isKeyFrame(int time);
 	void removeKeyframe(int time);
 	string toString();
+	bool hasMinKeyFrames;
+	
 private:
 	vector<struct Keyframe> keyFrameArr;
 	void computeTangents();

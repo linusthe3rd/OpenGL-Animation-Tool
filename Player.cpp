@@ -53,6 +53,8 @@ void Player::addKeyFrame(){
 }
 
 void Player::incrementFrame(int *frameCnt){
+	if (!channels[0].hasMinKeyFrames) { return; }
+	
 	if (this->currentFrame > this->channels[0].getMaxTime()) {
 		this->currentFrame = 0;
 		*frameCnt = this->currentFrame;
@@ -69,6 +71,8 @@ void Player::incrementFrame(int *frameCnt){
 	this->currentFrame++;
 }
 void Player::decrementFrame(int *frameCnt){
+	if (!channels[0].hasMinKeyFrames) { return; }
+	
 	if (this->currentFrame <= 0) {
 		this->currentFrame = this->channels[0].getMaxTime();
 		//return;
@@ -84,7 +88,7 @@ void Player::decrementFrame(int *frameCnt){
 	this->currentFrame--;
 }
 
-bool Player::updatePose(bool isForward){
+bool Player::updatePose(bool isForward){	
 	float x=0.0, y=0.0, z=0.0;
 	float direction = 1.0;
 	
@@ -118,6 +122,8 @@ void Player::removeKeyframe(int time){
 	for (int i = 0; i < channels.size(); i++) {
 		channels[i].removeKeyframe(time);
 	}
+	
+	this->keyframeAmt--;
 }
 
 string Player::toString(){
