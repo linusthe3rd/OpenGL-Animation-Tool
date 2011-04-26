@@ -123,3 +123,34 @@ string Player::toString(){
 	
 	return oss.str();
 }
+
+void Player::loadAnim(char* fName){
+	ifstream fs(fName);
+	
+	string line;
+	if (fs.is_open()){
+		int channelCount = 0;
+		Channel *chan;
+		
+		while (fs.good()) {
+			getline(fs, line);
+			
+			if (line == "channel"){
+				chan = &(this->channels[channelCount]);
+				channelCount++;
+			} else if (line == "keyframe"){
+				getline(fs, line);
+				vector<string> kfVals = splitStringBySpace(line);
+				
+				Keyframe *frame = new Keyframe();
+				frame->Time = convertToInt(kfVals[0]);
+				frame->Value = convertToFloat(kfVals[1]);
+				frame->RuleIn = kfVals[2];
+				frame->RuleOut = kfVals[3];
+				
+				chan->insertKeyFrame(frame);
+			}
+		}
+	}
+	
+}

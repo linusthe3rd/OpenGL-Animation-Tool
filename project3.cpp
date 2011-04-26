@@ -485,6 +485,10 @@ void init(){
 	if (loadFileName != NULL) {
 		robot->loadPose(loadFileName);
 	}
+	
+	if (loadAnimFileName != NULL) {
+		player->loadAnim(loadAnimFileName);
+	}
 }
 
 

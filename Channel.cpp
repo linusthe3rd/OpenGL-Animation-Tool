@@ -134,15 +134,11 @@ string Channel::toString(){
 	
 	for (int i = 0; i < keyFrameArr.size(); i++) {
 		oss << "keyframe" << "\n";
-		oss << keyFrameArr[i].Time << "\n";
-		oss << keyFrameArr[i].Value << "\n"; 
-		oss << keyFrameArr[i].TangentIn << "\n";
-		oss << keyFrameArr[i].TangentOut << "\n"; 
-		oss << keyFrameArr[i].RuleIn << "\n";
+		oss << keyFrameArr[i].Time << " ";
+		oss << keyFrameArr[i].Value << " "; 
+		oss << keyFrameArr[i].RuleIn << " ";
 		oss << keyFrameArr[i].RuleOut << "\n"; 
 	}
-	
-	oss << "\n";
 	
 	return oss.str();
 }

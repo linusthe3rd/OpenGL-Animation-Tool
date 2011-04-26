@@ -28,3 +28,11 @@ double convertToFloat(std::string const& s)
 		cout << "convertToFloat(\"" + s + "\")" << endl;
 	return x;
 }
+
+int convertToInt(string const& s){
+	istringstream i(s);
+	int x;
+	if (!(i >> x))
+		cout << "convertToFloat(\"" + s + "\")" << endl;
+	return x;
+}

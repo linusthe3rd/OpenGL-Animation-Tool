@@ -18,5 +18,6 @@ using namespace std;
 
 vector<string> splitStringBySpace(string str);
 double convertToFloat(string const& s);
+int convertToInt(string const& s);
 
 #endif

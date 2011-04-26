@@ -10,6 +10,8 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
+#include "Util.h"
+
 #include "Channel.h"
 #include "Robot.h"
 
@@ -31,6 +33,8 @@ public:
 	void setPlayDirection(bool direction);
 	
 	string toString();
+	
+	void loadAnim(char* fName);
 	
 private:
 	vector<Channel> channels;
