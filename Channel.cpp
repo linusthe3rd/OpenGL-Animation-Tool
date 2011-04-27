@@ -13,6 +13,10 @@ Channel::Channel() : keyFrameArr(){
 	this->hasMinKeyFrames = false;
 }
 
+/*
+ * Find the value of the frame at the given time. If the time is equal to a keyframe, that value is returned.
+ * Otherwise, the value is interpolated.
+ */
 float Channel::Evaluate(int time){
 	Keyframe_Time_functor f;
 	vector<Keyframe>::iterator ubIter = upper_bound(keyFrameArr.begin(), keyFrameArr.end(), time, f);
@@ -42,6 +46,9 @@ float Channel::Evaluate(int time){
 	return -1.0;
 }
 
+/*
+ * Add a new keyframe to the channel.
+ */
 void Channel::insertKeyFrame(Keyframe *frame){
 	this->keyFrameArr.push_back(*frame);
 	
@@ -50,11 +57,17 @@ void Channel::insertKeyFrame(Keyframe *frame){
 	this->Precompute();
 }
 
+/*
+ * Check if a time value is a keyframe or a regular frame
+ */
 bool Channel::isKeyFrame(int time){
 	Keyframe_Time_functor f;
 	return binary_search(keyFrameArr.begin(), keyFrameArr.end(), time, f);
 }
 
+/*
+ * Precompute the tangents and cubic coefficients of the curves between all the keyframes.
+ */
 void Channel::Precompute(){
 	if (this->keyFrameArr.size() > 1) {
 		this->hasMinKeyFrames = true;
@@ -66,11 +79,17 @@ void Channel::Precompute(){
 	this->computeConstants();
 }
 	
+/*
+ * Get the time in which the last frame will occur
+ */
 int Channel::getMaxTime(){
 	Keyframe frame = *(--this->keyFrameArr.end());
 	return frame.Time;
 }
 
+/*
+ * Remove a keyframe from the channel
+ */
 void Channel::removeKeyframe(int time){
 	time_equals_keyframe f = { time };
 	vector<Keyframe>::iterator objIter = find_if(keyFrameArr.begin(), keyFrameArr.end(), f);
@@ -85,6 +104,9 @@ void Channel::removeKeyframe(int time){
 	this->Precompute();
 }
 
+/*
+ * Compute the tangent values of a keyframe.
+ */
 void Channel::computeTangents(){
 	for (int i = 0; i < keyFrameArr.size(); i++) {
 		if (i == 0) {
@@ -124,6 +146,9 @@ void Channel::computeTangents(){
 	}
 }
 
+/*
+ * Compute the cubic coefficients of a keyframe.
+ */
 void Channel::computeConstants(){
 	glMatrixMode(GL_MODELVIEW);
 	
@@ -138,8 +163,8 @@ void Channel::computeConstants(){
 			
 			glPushMatrix();
 				glLoadIdentity();
-				glMultMatrixf(HERMITE_MATRIX);
 				glMultMatrixf(frameMatrix);
+				glMultMatrixf(HERMITE_MATRIX);
 				glGetFloatv(GL_MODELVIEW_MATRIX, frameMatrix);
 			glPopMatrix();
 			
@@ -151,6 +176,9 @@ void Channel::computeConstants(){
 	}
 }
 
+/*
+ * Get the string value of the channel
+ */
 string Channel::toString(){
 	ostringstream oss;
 	

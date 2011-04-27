@@ -161,16 +161,25 @@ void BodyPart::rotate(float angle, float x, float y, float z){
 	}
 }
 
+/*
+ * Set the angle of rotation of the limb
+ */
 void BodyPart::setRotationAngles(float xAngle, float yAngle, float zAngle){
 	this->rotations.x = xAngle;
 	this->rotations.y = yAngle;
 	this->rotations.z = zAngle;
 }
 
+/*
+ * Get the current rotation of the body part.
+ */
 Rotation_t BodyPart::getRotation(){
 	return this->rotations;
 }
 
+/*
+ * Determine if the y-vertex that the body part rotates on should be flipped.
+ */
 void BodyPart::shouldFlip(bool flip){
 	this->shouldFlipY = flip;
 }
@@ -259,10 +268,16 @@ void BodyPart::draw(){
 	glEnd();
 }
 
+/*
+ * Set the name of the limb to be used in its string representation.
+ */
 void BodyPart::setLimbName(string _name){
 	this->name = _name;
 }
 
+/*
+ * Output the string value of the body part
+ */
 string BodyPart::toString(){
 	ostringstream oss;
 	

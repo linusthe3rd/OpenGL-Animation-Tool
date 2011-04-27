@@ -37,7 +37,6 @@ public:
 	Robot();
 	
 	void loadPose(char* fName);
-	vector<string> splitStringBySpace(string str);
 	void rotateLimb(float angle, float x, float y, float z);
 	void setEditableLimb(int limb);
 	void draw();

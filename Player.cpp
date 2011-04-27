@@ -18,6 +18,9 @@ Player::Player(Robot* _rbt): channels(45) {
 	this->isForward = true;
 }
 
+/*
+ * Add a new keyframe to the animation
+ */
 void Player::addKeyFrame(){
 	vector<float> limbRoation;
 	int currentLimb = 0;
@@ -28,22 +31,22 @@ void Player::addKeyFrame(){
 		Keyframe *frameX = new Keyframe();
 		frameX->Time = this->keyframeAmt * FRAME_INC;
 		frameX->Value = limbRoation[0];
-		frameX->RuleIn = "flat";
-		frameX->RuleOut = "flat";
+		frameX->RuleIn = "linear";
+		frameX->RuleOut = "linear";
 		this->channels[i].insertKeyFrame(frameX);
 		
 		Keyframe *frameY = new Keyframe();
 		frameY->Time = this->keyframeAmt * FRAME_INC;
 		frameY->Value = limbRoation[1];
-		frameY->RuleIn = "flat";
-		frameY->RuleOut = "flat";
+		frameY->RuleIn = "linear";
+		frameY->RuleOut = "linear";
 		this->channels[i+1].insertKeyFrame(frameY);
 		
 		Keyframe *frameZ = new Keyframe();
 		frameZ->Time = this->keyframeAmt * FRAME_INC;
 		frameZ->Value = limbRoation[2];
-		frameZ->RuleIn = "flat";
-		frameZ->RuleOut = "flat";
+		frameZ->RuleIn = "linear";
+		frameZ->RuleOut = "linear";
 		this->channels[i+2].insertKeyFrame(frameZ);
 		
 		currentLimb++;
@@ -52,6 +55,9 @@ void Player::addKeyFrame(){
 	this->keyframeAmt++;
 }
 
+/*
+ * Increment the animation by a single frame.
+ */
 void Player::incrementFrame(int *frameCnt){
 	if (!channels[0].hasMinKeyFrames) { return; }
 	
@@ -68,6 +74,10 @@ void Player::incrementFrame(int *frameCnt){
 	
 	this->currentFrame++;
 }
+
+/*
+ * Decrease the current animation by a single frame
+ */
 void Player::decrementFrame(int *frameCnt){
 	if (!channels[0].hasMinKeyFrames) { return; }
 	
@@ -85,6 +95,9 @@ void Player::decrementFrame(int *frameCnt){
 	}
 }
 
+/*
+ * Helper to update the pose of the robot .
+ */
 bool Player::updatePose(bool isForward){	
 	float x=0.0, y=0.0, z=0.0;
 	float direction = 1.0;
@@ -100,21 +113,19 @@ bool Player::updatePose(bool isForward){
 		y = channels[i+1].Evaluate(this->currentFrame);
 		z = channels[i+2].Evaluate(this->currentFrame);
 		if (channels[i].isKeyFrame(this->currentFrame) ) {
-			this->rbt->setLimbRotation(curLimbIndex, x, y, z);
 			isKeyframe = true;
-		} else {
-			this->rbt->setEditableLimb(curLimbIndex);
-			this->rbt->rotateLimb(x*direction, 1.0, 0.0, 0.0);
-			this->rbt->rotateLimb(y*direction, 0.0, 1.0, 0.0);
-			this->rbt->rotateLimb(z*direction, 0.0, 0.0, 1.0);
-		}
+		} 
 		
+		this->rbt->setLimbRotation(curLimbIndex, x, y, z);
 		curLimbIndex++;
 	}
 	
 	return isKeyframe;
 }
 
+/*
+ * Remove a keyframe from the animation
+ */
 void Player::removeKeyframe(int time){
 	for (int i = 0; i < channels.size(); i++) {
 		channels[i].removeKeyframe(time);
@@ -123,6 +134,9 @@ void Player::removeKeyframe(int time){
 	this->keyframeAmt--;
 }
 
+/*
+ * Output the stirng representation of the animation
+ */
 string Player::toString(){
 	ostringstream oss;
 	
@@ -133,6 +147,9 @@ string Player::toString(){
 	return oss.str();
 }
 
+/*
+ * Load an animation from the provided file
+ */
 void Player::loadAnim(char* fName){
 	ifstream fs(fName);
 	
@@ -161,5 +178,4 @@ void Player::loadAnim(char* fName){
 			}
 		}
 	}
-	
 }

@@ -132,6 +132,9 @@ Robot::Robot(){
 	this->lFoot->setSpecularLightColor(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
+/*
+ * Load the robot's pose from the provided file.
+ */
 void Robot::loadPose(char* fName){
 	ifstream fs(fName);
 	
@@ -186,28 +189,25 @@ void Robot::loadPose(char* fName){
 	}
 }
 
-vector<string> Robot::splitStringBySpace(string str){
-    string buf; // Have a buffer string
-    stringstream ss(str); // Insert the string into a stream
-	
-    vector<string> tokens; // Create vector to hold our words
-	
-    while (ss >> buf)
-        tokens.push_back(buf);
-	
-	return tokens;
-}
-
+/*
+ * Rotate the current limb by the given angle about the x, y, or z axis.
+ */
 void Robot::rotateLimb(float angle, float x, float y, float z){
 	if (this->curLimb != NULL)
 		this->curLimb->rotate(angle, x, y, z);
 }
 
+/*
+ * Set the rotation angle of the given limb.
+ */
 void Robot::setLimbRotation(int limb, float xAngle, float yAngle, float zAngle){
 	BodyPart *limbPtr = this->getLimb(limb);
 	limbPtr->setRotationAngles(xAngle, yAngle, zAngle);
 }
 
+/*
+ * Returns a reference to a BodyPart object representing the robot's limb.
+ */
 BodyPart* Robot::getLimb(int limb){
 	BodyPart *limbPtr = NULL;
 	
@@ -261,10 +261,12 @@ BodyPart* Robot::getLimb(int limb){
 			break;
 	}
 	
-	return limbPtr;
-	
+	return limbPtr;	
 }
 
+/*
+ * Get the rotation values of the given limb
+ */
 vector<float> Robot::getLimbRotation(int limb){
 	vector<float> rotations(3,0);
 	BodyPart *limbPtr = this->getLimb(limb);
@@ -277,6 +279,9 @@ vector<float> Robot::getLimbRotation(int limb){
 	return rotations;
 }
 
+/*
+ * Set the currently editable limb of the robot.
+ */
 void Robot::setEditableLimb(int limb){
 	this->curLimb = this->getLimb(limb);
 }
@@ -338,6 +343,9 @@ void Robot::draw(){
 	glPopMatrix();
 }
 
+/*
+ * Outputs the string value of the robot.
+ */
 string Robot::toString(){
 	string out = "";
 	

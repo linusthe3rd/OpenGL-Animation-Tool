@@ -88,7 +88,9 @@ Player *player;
 int currentFrame, framerate;
 bool isKeyframe;
 
-
+/*
+ * Display a string in the 3D environment
+ */
 void renderBitmapString(
 						float x,
 						float y,
@@ -97,12 +99,15 @@ void renderBitmapString(
 						char *string) {
 	
 	char *c;
-	glRasterPos3f(x, y,z);
+	glRasterPos3f(x,y,z);
 	for (c=string; *c != '\0'; c++) {
 		glutBitmapCharacter(font, *c);
 	}
 }
 
+/*
+ * Update the text that will display the current frame number
+ */
 void updateFrameText(){
 	if (currentFrame <= 0) {
 		isKeyframe = true;
@@ -164,6 +169,9 @@ void display(void){
 	glutSwapBuffers();
 }
 
+/*
+ * Manages whether the robot is being animated or not.
+ */
 void animate(int value) {
 	int timerMS = int(( 1.0 / framerate ) * 1000);
 	glutTimerFunc(timerMS, animate, 0);
@@ -325,10 +333,11 @@ void onSpecialKeyboardCB(int key, int x, int y) {
 		default:
 			break;
 	}
-	
-	
 }
 
+/*
+ * Save the current robot pose to a file
+ */
 void saveCurrentPose(){
 	char* fName = NULL;
 	if (saveFileName != NULL ) {
@@ -350,6 +359,9 @@ void saveCurrentPose(){
 	}
 }
 
+/*
+ * Save the current animation to a file
+ */
 void saveCurrentAnimation(){
 	char* fName = NULL;
 	if (saveAnimFileName != NULL ) {
