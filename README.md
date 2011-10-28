@@ -10,7 +10,7 @@ Description
 	the 3D environment.
 
 	Note:
-		I have included the library stb_image.c, written by Sean Barret, from http://nothings.org/stb_image.c to help with the loading of image files into memory.
+		I have included the library [stb_image.c](http://nothings.org/stb_image.c), written by Sean Barret, to help with the loading of image files into memory.
 		
 Instructions
 ============
