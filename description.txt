@@ -40,6 +40,27 @@ Instructions
 	Save Current Pose
 		- Right click the mouse and choose "Save Pose"
 	
+	Save Current Animation
+		- Right click the mouse and choose "Save Animation"
+		
+	Change animation framerate
+		- Right click the mouse, hover over "Set framerate" and click on a number to set the framerate
+	
+	Play the animation:
+		- Press "f" for forward play
+		- Press "b" for backward play
+	
+	Stop the animation:
+		- Press "s"
+		
+	Add a keyframe to the animation:
+		- Press the space bar
+	
+	Increase the current frame
+		- Press the right arrow button
+	
+	Decrease the current frame
+		- Press the left arrow button
 		
 Program Execution Instructions
 ==============================
@@ -55,6 +76,8 @@ Program Execution Instructions
 	Arguments (optional):
 		-s	A path to a file that will be created to store the current pose of the robot.
 		-l	A path to a file that will be used to load a previously saved robot file
+		-As A path to a file that will be created to store the current animation of the robot.
+		-Al A path to a file that will be used to load a previously animation file
 		
 	Note:
 		I have included a pose file called "ro.bit"
@@ -66,6 +89,15 @@ Completed Requirements
 	- Create a 3D robot from project 2
 	- saving the current pose of a robot to a file
 	- loading a robot's pose into the program
+	- Create an animation clip and save it to a file
+	- Load an animation clip from a file
+	- Specify the framerate of the animation
+	- Specify key poses using the spacebar (Pressing the spacebar will append the current pose as a keyframe 10 frames ahead of the last keyframe)
+	- Remove a keyframe from the animation using the "d" button
+	- Play the animation clip forward and backward using the "f" and "b" button respectively
+	- Stop the animation from playing using the "s" button
+	- Use the left and right arrow buttons to increase and decrease the current frame
+	- Dragging the mouse while pressing the SHIFT button will increase or decrease the frame
 	
 	
 Robot Pose File
@@ -91,6 +123,56 @@ Baboon.bmp
 0.9 0.9 0.9 1
 0.9 0.9 0.9 1
 100
+
+Robot Animation File
+===============
+
+The format of the pose file is the following:
+
+"channel"\n
+"keyframe"\n
+<int, time> <float, value> <string, tangent in rule> <string, tangent out rule>\n
+
+Example:
+
+channel
+keyframe
+0 0 linear linear
+keyframe
+10 0 linear linear
+keyframe
+20 0 linear linear
+keyframe
+30 0 linear linear
+keyframe
+40 0 linear linear
+keyframe
+50 0 linear linear
+keyframe
+60 0 linear linear
+keyframe
+70 0 linear linear
+keyframe
+80 0 linear linear
+channel
+keyframe
+0 0 linear linear
+keyframe
+10 0 linear linear
+keyframe
+20 0 linear linear
+keyframe
+30 0 linear linear
+keyframe
+40 0 linear linear
+keyframe
+50 0 linear linear
+keyframe
+60 0 linear linear
+keyframe
+70 0 linear linear
+keyframe
+80 0 linear linear
 
 
 	
